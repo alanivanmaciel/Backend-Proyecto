@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const CartsManager = require("../managers/cartsManagerFS.js");
+import Router from "express";
+import CartsManager from "../managers/cartsManagerFS.js";
 const router = Router();
 
 const cartsService = new CartsManager();
@@ -40,4 +40,4 @@ router
     });
   });
 
-module.exports = router;
+export default router;
