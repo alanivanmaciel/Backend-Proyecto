@@ -1,17 +1,41 @@
-//const productsRouter = require("./routes/products.router.js") ;
 import cartsRouter from "./routes/carts.router.js";
-import express from "express";
 import productsRouter from "./routes/products.router.js";
+import express from "express";
+import handlebars from "express-handlebars";
+import __dirname from "./utils.js";
+import { Server } from "socket.io";
+
+//const httpServer = createServer();
+//const io = new Server(httpServer);
 
 const app = express();
 const PORT = 8080;
 
+app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/products", productsRouter);
+app.engine("handlebars", handlebars.engine());
+app.set("views", __dirname + "/views");
+app.set("view engine", "handlebars");
+
+app.use("/", productsRouter);
 app.use("/api/carts", cartsRouter);
 
-app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
   console.log("Escuchando en el puerto 8080:");
 });
+
+const socketServer = new Server(httpServer);
+
+//console.log(socketServer);
+
+socketServer.on('connection', socket => {
+  console.log('Nuevo cliente conectado');
+
+  socket.on('message', data => {
+    console.log(data);
+  })
+})
+
+//1.19

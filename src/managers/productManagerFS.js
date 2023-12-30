@@ -58,12 +58,10 @@ class ProductManager {
   async getProducts(limit) {
     try {
       const readProducts = await this.readJson();
-      console.log("Todos los productos:");
       if (Array.isArray(readProducts)) {
         const limitProducts = limit
           ? readProducts.slice(0, limit)
           : readProducts;
-        console.log(limitProducts);
         return limitProducts;
       }
     } catch (error) {
@@ -75,7 +73,6 @@ class ProductManager {
     const readProducts = await this.readJson();
     const product = readProducts.find((product) => product.id === id);
     if (product) {
-      console.log(product);
       return product;
     } else {
       console.log(`ID de producto (${id}) no encontrado.`);

@@ -1,5 +1,5 @@
 import Router from "express";
-import ProductManager from"../managers/productManagerFS.js";
+import ProductManager from "../managers/productManagerFS.js";
 
 const router = Router();
 const productManager = new ProductManager();
@@ -8,10 +8,10 @@ router.get("/", async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
     const products = await productManager.getProducts(limit);
-    res.json(products);
+    res.render("home", { products });
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error al obtener la lista de productos!");
+    res.render("Error al obtener la lista de productos!");
     return;
   }
 });
@@ -56,15 +56,13 @@ router.put("/:pid", async (req, res) => {
 router.delete("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
-    await productManager.deleteProduct(parseInt(pid))
+    await productManager.deleteProduct(parseInt(pid));
 
     res.status(201).send({
       status: "succes",
-      message: "Producto eliminado correctamente."
-    })
-  } catch (error) {
-
-  }
-})
+      message: "Producto eliminado correctamente.",
+    });
+  } catch (error) {}
+});
 
 export default router;
