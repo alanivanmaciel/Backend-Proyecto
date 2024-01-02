@@ -75,8 +75,8 @@ class ProductManager {
     if (product) {
       return product;
     } else {
-      console.log(`ID de producto (${id}) no encontrado.`);
-      return "El producto no existe.";
+      
+      return (`ID de producto (${id}) no encontrado.`);
     }
   }
 

@@ -5,9 +5,6 @@ import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
 
-//const httpServer = createServer();
-//const io = new Server(httpServer);
-
 const app = express();
 const PORT = 8080;
 
@@ -20,17 +17,17 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 app.use("/", productsRouter);
+app.use("/realtimeproducts", productsRouter);
+
 app.use("/api/carts", cartsRouter);
 
 const httpServer = app.listen(PORT, () => {
   console.log("Escuchando en el puerto 8080:");
 });
 
-const socketServer = new Server(httpServer);
+const io = new Server(httpServer);
 
-//console.log(socketServer);
-
-socketServer.on('connection', socket => {
+io.on('connection', (socket) => {
   console.log('Nuevo cliente conectado');
 
   socket.on('message', data => {
@@ -38,4 +35,4 @@ socketServer.on('connection', socket => {
   })
 })
 
-//1.19
+//2.31

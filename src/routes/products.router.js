@@ -16,6 +16,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/realtimeproducts", async (req, res) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
+    const products = await productManager.getProducts(limit);
+    res.render("realtimeproducts", { products });
+  } catch (error) {
+    console.log(error);
+    res.render("Error al obtener la lista de productos!");
+    return;
+  }
+});
+
 router.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
