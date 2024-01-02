@@ -28,11 +28,9 @@ const httpServer = app.listen(PORT, () => {
 const io = new Server(httpServer);
 
 io.on('connection', (socket) => {
-  console.log('Nuevo cliente conectado');
+  console.log('Nuevo cliente conectado.');
 
   socket.on('message', data => {
     console.log(data);
   })
 })
-
-//2.31
