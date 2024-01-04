@@ -42,13 +42,9 @@ io.on("connection", (socket) => {
       stock: data.stock,
       category: data.category
     };
-    console.log(newProduct);
-    console.log('hasta aca llega data - app.js');
     await productManager.addProduct(newProduct);
     const updatedProducts = await productManager.getProducts();
     io.emit("updateProducts", { products: updatedProducts });
-
-
   });
 
   socket.on("deleteProduct", async (data) => {

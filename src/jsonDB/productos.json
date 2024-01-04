@@ -1,14 +1,5 @@
 [
   {
-    "title": "Short",
-    "description": "Short Negro XL.",
-    "price": 30,
-    "thumbnail": "/images/ShortN.jpg",
-    "code": "S001",
-    "stock": 15,
-    "id": 2
-  },
-  {
     "title": "Camiseta",
     "description": "Camiseta Blanca Manga Corta.",
     "price": 25,

@@ -39,7 +39,7 @@ function addProduct() {
     price,
     thumbnail,
     stock,
-    category
+    category,
   });
 }
 

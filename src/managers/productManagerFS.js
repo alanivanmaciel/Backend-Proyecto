@@ -20,7 +20,6 @@ class ProductManager {
   }
 
   async addProduct(product) {
-    console.log(product, 'productmanager');
     if (
       !product.title ||
       !product.description ||
