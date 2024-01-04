@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
     const products = await productManager.getProducts(limit);
-    res.render("home", { products });
+    res.render("realtimeproducts", { products });
   } catch (error) {
     console.log(error);
     res.render("Error al obtener la lista de productos!");
@@ -20,7 +20,7 @@ router.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
     const productId = await productManager.getProductById(Number(pid));
-    res.send(productId);
+    res.send(productId, 'esto');
   } catch (error) {
     console.log(error);
     res.status(500).send("Error al obtener al intentar obtener el producto.");
@@ -29,6 +29,8 @@ router.get("/:pid", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+    console.log(req.body)
+    console.log('llega products');
   const product = req.body;
   const newProduct = await productManager.addProduct(product);
   res.json(newProduct);
