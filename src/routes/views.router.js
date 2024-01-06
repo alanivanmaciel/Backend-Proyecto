@@ -1,4 +1,4 @@
-import Router from "express";
+import { Router } from "express";
 import ProductManager from "../managers/productManagerFS.js";
 
 const router = Router();
@@ -29,8 +29,6 @@ router.get("/:pid", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    console.log(req.body)
-    console.log('llega products');
   const product = req.body;
   const newProduct = await productManager.addProduct(product);
   res.json(newProduct);
