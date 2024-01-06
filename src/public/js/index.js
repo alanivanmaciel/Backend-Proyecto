@@ -32,6 +32,10 @@ function addProduct() {
   const stock = document.getElementById("stock").value;
   const category = document.getElementById("category").value;
 
+  if(!title){
+    console.log('vacio');
+    return
+  }
   socket.emit("addProduct", {
     title,
     description,
