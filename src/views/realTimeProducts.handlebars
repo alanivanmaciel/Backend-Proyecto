@@ -20,10 +20,12 @@
     </form>
   </div>
 
-  <div id="productList">
-    <h1>Lista de productos:</h1>
-    {{#each products}}
+  <div id="productList" class="productList">
     <div>
+      <h1>Lista de productos:</h1>
+    </div>
+    {{#each products}}
+    <div class="product">
       <h4>{{this.code}}: {{this.title}}</h4>
       <p>ID de producto: {{this.id}}</p>
       <p>{{this.description}} - ${{this.price}} - Stock: {{this.stock}}</p>

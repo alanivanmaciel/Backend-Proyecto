@@ -9,7 +9,7 @@ import ProductManager from "./managers/productManagerFS.js";
 
 const app = express();
 const PORT = 8080;
-console.log(__dirname);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
