@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
     const products = await productManager.getProducts(limit);
-    res.render("realtimeproducts", { products });
+    res.render("realtimeproducts", { products, style: 'index.css'});
   } catch (error) {
     console.log(error);
     res.render("Error al obtener la lista de productos!");
