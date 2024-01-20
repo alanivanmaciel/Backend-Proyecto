@@ -1,34 +1,38 @@
-import __dirname from "./utils.js";
-import cartsRouter from "./routes/carts.router.js";
-import productsRouter from "./routes/products.router.js";
-import viewsRouter from "./routes/views.router.js";
 import express from "express";
+import logger from "morgan";
 import handlebars from "express-handlebars";
+import __dirname from "./utils.js";
 import { Server } from "socket.io";
-import ProductManager from "./managers/productManagerFS.js";
+
+import appRouter from "./routes/index.js";
+import connectDB from "./config/connectDB.js";
+import ProductManagerMongo from "./daos/MongoDB/productManager.js";
+import messageModel from "./daos/models/message.models.js";
 
 const app = express();
 const PORT = 8080;
-console.log(__dirname);
+
+connectDB();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(logger("dev"));
+
+app.use(appRouter);
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + "/public"));
 
-app.use("/api/products", productsRouter);
-app.use("/realtimeproducts", viewsRouter);
-app.use("/api/carts", cartsRouter);
-
-const httpServer = app.listen(PORT, () => {
-  console.log("Escuchando en el puerto 8080:");
+const httpServer = app.listen(PORT, (err) => {
+  if (err) console.log(err);
+  console.log(`Escuchando en el puerto ${PORT}:`);
 });
 
 const io = new Server(httpServer);
-const productManager = new ProductManager();
+const managerMongo = new ProductManagerMongo();
 
 io.on("connection", (socket) => {
   console.log("Nuevo cliente conectado.");
@@ -41,17 +45,29 @@ io.on("connection", (socket) => {
       thumbnail: data.thumbnail,
       code: data.code,
       stock: data.stock,
-      category: data.category
+      category: data.category,
     };
-    await productManager.addProduct(newProduct);
-    const updatedProducts = await productManager.getProducts();
-    io.emit("updateProducts", { products: updatedProducts });
+    await managerMongo.createproduct(newProduct);
+    const updateProducts = await managerMongo.getProducts();
+    io.emit("updateProducts", { products: updateProducts });
   });
 
   socket.on("deleteProduct", async (data) => {
-    const idProduct = data.idProduct;
-    await productManager.deleteProduct(parseInt(idProduct));
-    const updatedProducts = await productManager.getProducts();
-    io.emit("updateProducts", { products: updatedProducts });
+    const pid = data.idProduct;
+    await managerMongo.deleteProduct(pid);
+    const updateProducts = await managerMongo.getProducts();
+    io.emit("updateProducts", { products: updateProducts });
+  });
+
+  socket.on("getMessages", async (data) => {
+    const message = await messageModel.find();
+    io.emit("messageLogs", message);
+  });
+
+  socket.on("message", async (data) => {
+    await messageModel.create(data);
+
+    const message = await messageModel.find();
+    io.emit("messageLogs", message);
   });
 });

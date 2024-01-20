@@ -9,15 +9,6 @@
     "id": 4
   },
   {
-    "title": "Gorra",
-    "description": "Gorra de Béisbol Azul.",
-    "price": 15,
-    "thumbnail": "/images/GorraAzul.jpg",
-    "code": "G004",
-    "stock": 30,
-    "id": 5
-  },
-  {
     "title": "Mochila",
     "description": "Mochila Negra con Compartimento para Laptop.",
     "price": 40,
@@ -73,6 +64,39 @@
     "stock": "11",
     "category": "Indumentaria",
     "id": 11,
+    "status": true
+  },
+  {
+    "title": "Remera",
+    "description": "Remera Negra",
+    "price": "23",
+    "thumbnail": "/images/remeranegra.jpg",
+    "code": "R001",
+    "stock": "22",
+    "category": "Indumentaria",
+    "id": 12,
+    "status": true
+  },
+  {
+    "title": "remer",
+    "description": "remer",
+    "price": "123123",
+    "thumbnail": "adsasda",
+    "code": "adsad1",
+    "stock": "32",
+    "category": "adadsa",
+    "id": 13,
+    "status": true
+  },
+  {
+    "title": "remer",
+    "description": "remer",
+    "price": "123123",
+    "thumbnail": "adsasda",
+    "code": "adsad11",
+    "stock": "32",
+    "category": "adadsa",
+    "id": 14,
     "status": true
   }
 ]

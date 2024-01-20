@@ -1,10 +1,10 @@
 body {
     margin: 0px;
-    background-color: #27282D;
+    background-color: black;
+    color: white;
 }
 
 .addProduct {
-    background-color: white;
     padding: 10px;
     text-align: center;
 }

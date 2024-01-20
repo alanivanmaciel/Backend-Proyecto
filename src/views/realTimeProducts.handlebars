@@ -22,17 +22,20 @@
 
   <div id="productList">
     <h1>Lista de productos:</h1>
-    {{#each products}}
-    <div>
-      <h4>{{this.code}}: {{this.title}}</h4>
-      <p>ID de producto: {{this.id}}</p>
-      <p>{{this.description}} - ${{this.price}} - Stock: {{this.stock}}</p>
-      <button type="button" onclick="deleteProduct('{{this.id}}')">Eliminar producto</button>
+    {{#each product}}
+    <div id="{{_id}}">
+      <h4>{{code}}: {{title}}</h4>
+      <p>ID de producto: {{_id}}</p>
+      <p>{{description}} - ${{price}} - Stock: {{stock}}</p>
+      <button type="button" onclick="updateProduct('{{_id}}')">Actualizar producto</button>
+      <button type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
     </div>
     {{/each}}
   </div>
+
 </div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/index.js"></script>
