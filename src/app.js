@@ -59,15 +59,15 @@ io.on("connection", (socket) => {
     io.emit("updateProducts", { products: updateProducts });
   });
 
-  socket.on("getMessages", async (data) => {
+  socket.on('getMessages', async(data) => {
     const message = await messageModel.find();
-    io.emit("messageLogs", message);
-  });
+    io.emit('messageLogs', message)
+  })
 
-  socket.on("message", async (data) => {
+  socket.on('message', async (data) => {
     await messageModel.create(data);
 
     const message = await messageModel.find();
-    io.emit("messageLogs", message);
-  });
+    io.emit('messageLogs', message)
+  })
 });
