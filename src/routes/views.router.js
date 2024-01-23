@@ -1,9 +1,7 @@
 import { Router } from "express";
-import ProductManager from "../daos/FileSystem/productManagerFS.js";
 import ProductManagerMongo from "../daos/MongoDB/productManager.js";
 
 const router = Router();
-const productManager = new ProductManager();
 const managerMongo = new ProductManagerMongo();
 
 router
@@ -24,14 +22,10 @@ router
   .get("/:pid", async (req, res) => {
     try {
       const { pid } = req.params;
-      console.log(pid, "aca");
-      //const productId = await productManager.getProductById(Number(pid));
       const product = await managerMongo.getProductById(pid);
-      // const product = products.map((product) => ({
-      //   ...product.toObject(),
-      // }));
-      //console.log(product);
-      res.send("realtimeproducts", { product, style: "index.css" });
+      console.log(pid);
+
+      res.render("realtimeproducts", { product, style: "index.css" });
     } catch (error) {
       console.log(error);
       res.status(500).send("Error al obtener al intentar obtener el producto.");
@@ -40,9 +34,13 @@ router
   })
 
   .post("/", async (req, res) => {
-    const { product } = req.body;
-    const result = await managerMongo.create(product);
-    res.json(result);
+    try {
+      const { product } = req.body;
+      const result = await managerMongo.create(product);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+    }
   })
 
   .put("/:pid", async (req, res) => {
@@ -50,7 +48,7 @@ router
       const { pid } = req.params;
       const { prop, value } = req.body;
 
-      await productManager.updateProduct(parseInt(pid), prop, value);
+      await ProductManagerMongo.updateProduct(pid, prop, value);
 
       res.status(201).send({
         status: "succes",
@@ -67,12 +65,14 @@ router
   .delete("/:pid", async (req, res) => {
     try {
       const { pid } = req.params;
-      await productManager.deleteProduct(parseInt(pid));
+      await managerMongo.deleteProduct(pid);
       res.status(201).send({
         status: "succes",
         message: "Producto eliminado correctamente.",
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   });
 
 export default router;

@@ -9,7 +9,7 @@ router
     try {
       const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
       const products = await productManager.getProducts(limit);
-      res.render("home", { products });
+      res.render("home", { products, style: "index.css" });
     } catch (error) {
       console.log(error);
       res.render("Error al obtener la lista de productos!");
@@ -21,7 +21,8 @@ router
     try {
       const { pid } = req.params;
       const productId = await productManager.getProductById(Number(pid));
-      res.send(productId);
+      console.log('asdasd');
+      res.render({productId, style: "index.css"});
     } catch (error) {
       console.log(error);
       res.status(500).send("Error al obtener al intentar obtener el producto.");

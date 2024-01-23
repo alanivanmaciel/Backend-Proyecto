@@ -9,13 +9,18 @@ socket.on("updateProducts", (data) => {
     h1.textContent = "Lista de productos:";
     productList.appendChild(h1);
     data.products.forEach((product) => {
-      const productContainer = document.createElement("div");
       const id = product._id.toString();
-      productContainer.innerHTML = `      
+      const productContainer = document.createElement("div");
+      const parametro = "id";
+      productContainer.setAttribute(parametro, id);
+      productContainer.innerHTML = ` 
       <h4>${product.code}: ${product.title}</h4>
       <p>ID de producto: ${id}</p>
       <p>${product.description} - $${product.price} - Stock: ${product.stock}</p>
-      <button type="button" onclick="deleteProduct('${id}')">Eliminar producto</button>
+      <button type="button"
+      onclick="updateProductId('${id}','${product.code}','${product.title}','${product.description}','${product.price}','${product.thumbnail}','${product.stock}','${product.category}')">Actualizar
+      producto</button>
+      <button type="button" onclick="deleteProduct('${id}')">Eliminar producto</button>   
     `;
       productList.appendChild(productContainer);
     });
@@ -73,8 +78,16 @@ function clear() {
   document.getElementById("category").value = "";
 }
 
-function updateProduct(idProduct) {
-  console.log(idProduct);
+function updateProductId(
+  idProduct,
+  code,
+  title,
+  description,
+  price,
+  thumbnail,
+  stock,
+  category
+) {
   Swal.fire({
     title: "¿Desea actualizar este producto?",
     text: "Esta acción no se puede deshacer.",
@@ -86,15 +99,6 @@ function updateProduct(idProduct) {
     cancelButtonText: "Cancelar",
   }).then((result) => {
     if (result.isConfirmed) {
-      // Lógica para actualizar el producto
-      // Puedes emitir un evento al servidor o realizar una solicitud HTTP
-      // utilizando el ID del producto (productId) para identificar el producto a actualizar.
-      // Ejemplo:
-      // socket.emit("updateProduct", { productId });
-      // o realizar una solicitud HTTP con fetch o axios.
-
-      // Después de actualizar, puedes mostrar un mensaje de éxito.
-
       Swal.fire({
         title: "Actualizar producto",
         html: `
@@ -118,25 +122,27 @@ function updateProduct(idProduct) {
         confirmButtonText: "Actualizar",
         cancelButtonText: "Cancelar",
         preConfirm: () => {
-          // Obtener los valores actualizados del formulario
-          const updatedCode = document.getElementById("updateCode").value;
-          const updatedTitle = document.getElementById("updateTitle").value;
-          const updatedDescription =
-            document.getElementById("updateDescription").value;
-          const updatedPrice = document.getElementById("updatePrice").value;
-          const updatedThumbnail =
-            document.getElementById("updateThumbnail").value;
-          const updatedStock = document.getElementById("updateStock").value;
-          const updatedCategory =
-            document.getElementById("updateCategory").value;
+          code = document.getElementById("updateCode").value;
+          title = document.getElementById("updateTitle").value;
+          description = document.getElementById("updateDescription").value;
+          price = document.getElementById("updatePrice").value;
+          thumbnail = document.getElementById("updateThumbnail").value;
+          stock = document.getElementById("updateStock").value;
+          category = document.getElementById("updateCategory").value;
 
-          // Lógica para realizar la actualización con los valores obtenidos
-          // socket.emit("updateProduct", { productId: id, updatedFields });
-          // o realizar una solicitud HTTP con fetch o axios.
-          // ...
+          socket.emit("updateProductId", {
+            idProduct,
+            code,
+            title,
+            description,
+            price,
+            thumbnail,
+            stock,
+            category,
+          });
+          Swal.fire('Actualizado', 'El producto ha sido actualizado correctamente.', 'success');
         },
       });
-      //Swal.fire('Actualizado', 'El producto ha sido actualizado correctamente.', 'success');
     }
   });
 }

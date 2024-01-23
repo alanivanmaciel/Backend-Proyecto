@@ -1,31 +1,59 @@
 import productsModel from "../models/products.models.js";
-import  mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 class ProductManagerMongo {
   async getProducts() {
-    return await productsModel.find({ isActive: true });
+    try {
+      return await productsModel.find({ isActive: true });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async getProductById(pid) {
-    //return await productsModel.findOne({ _id: pid });
     try {
-      const product = await productsModel.findOne({ _id: mongoose.Types.ObjectId.createFromHexString(pid) });
-      return product;
+      return await productsModel.findById({ _id: pid });
     } catch (error) {
       console.error(error);
-      throw error; // Puedes manejar el error según tus necesidades
+    }
+  }
+
+  async updateProduct(data) {
+    try {
+      return await productsModel.findByIdAndUpdate(
+        { _id: data.idProduct },
+        {
+          code: data.code,
+          title: data.title,
+          description: data.description,
+          price: data.price,
+          thumbnail: data.thumbnail,
+          stock: data.stock,
+          category: data.category,
+        }
+      );
+    } catch (error) {
+      console.log(error);
     }
   }
 
   async createproduct(newProduct) {
-    return await productsModel.create(newProduct);
+    try {
+      return await productsModel.create(newProduct);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async deleteProduct(pid) {
-    return await productsModel.findByIdAndUpdate(
-      { _id: pid },
-      { isActive: false }
-    );
+    try {
+      return await productsModel.findByIdAndUpdate(
+        { _id: pid },
+        { isActive: false }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
