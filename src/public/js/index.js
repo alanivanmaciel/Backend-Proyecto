@@ -68,6 +68,13 @@ function addProduct() {
   clear();
 }
 
+socket.on('exisitingCode', (data) => {
+  Swal.fire({
+    title: "Este producto ya existe!",
+    text: `El codigo ${data.data} ya existe en el listado de productos.`
+  });
+})
+
 function clear() {
   document.getElementById("title").value = "";
   document.getElementById("description").value = "";

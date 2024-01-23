@@ -16,7 +16,21 @@ body {
 }
 
 .chatContainer { 
+    top: 0px;
     background-color: darkslategrey;
     text-align: center;
     color: white;
+}
+
+.chatContainer h1 {
+    margin-top: 0px;
+    padding-top: 10px;
+}
+
+.chatContainer li {
+    list-style: none;
+}
+
+#chatbox {
+    margin: 10px;
 }

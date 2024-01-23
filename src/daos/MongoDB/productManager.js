@@ -55,6 +55,10 @@ class ProductManagerMongo {
       console.log(error);
     }
   }
+
+  async getProductCode(code){
+    return await productsModel.findOne({code})
+  }
 }
 
 export default ProductManagerMongo;

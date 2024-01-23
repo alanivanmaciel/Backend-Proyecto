@@ -23,8 +23,6 @@ router
     try {
       const { pid } = req.params;
       const product = await managerMongo.getProductById(pid);
-      console.log(pid);
-
       res.render("realtimeproducts", { product, style: "index.css" });
     } catch (error) {
       console.log(error);

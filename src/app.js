@@ -47,6 +47,13 @@ io.on("connection", (socket) => {
       stock: data.stock,
       category: data.category,
     };
+
+    const existingCode = await managerMongo.getProductCode(data.code);
+    if (existingCode) {
+      io.emit("exisitingCode", { data: data.code });
+      return "Ya existe un producto con el mismo código.";
+    }
+
     await managerMongo.createproduct(newProduct);
     const updateProducts = await managerMongo.getProducts();
     io.emit("updateProducts", { products: updateProducts });
