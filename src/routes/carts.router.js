@@ -2,7 +2,6 @@ import Router from "express";
 import cartsModel from "../daos/models/carts.models.js";
 
 const router = Router();
-const cartsmodel = new cartsModel();
 
 router
   .get("/:cid", async (req, res) => {
@@ -21,7 +20,6 @@ router
   .post("/", async (req, res) => {
     try {
       const result = await cartsModel.create();
-      console.log("funca");
       res.send({
         status: "succes",
         payload: result,
