@@ -3,21 +3,27 @@ import { Schema, model } from "mongoose";
 const productsCollection = "products";
 
 const productsSchema = new Schema({
-  title: String,
+  title: {
+    type: String,
+    index: true,
+  },
   description: String,
   price: Number,
   thumbnail: String,
   code: String,
   stock: Number,
-  category: String,
+  category: {
+    type: String,
+    index: true,
+  },
   status: {
     type: Boolean,
     default: true,
   },
   isActive: {
     type: Boolean,
-    default: true
-}
+    default: true,
+  },
 });
 
 const productsModel = model(productsCollection, productsSchema);

@@ -20,8 +20,8 @@ router
   .get("/:pid", async (req, res) => {
     try {
       const { pid } = req.params;
+      console.log('router');
       const productId = await productManager.getProductById(Number(pid));
-      console.log('asdasd');
       res.render({productId, style: "index.css"});
     } catch (error) {
       console.log(error);

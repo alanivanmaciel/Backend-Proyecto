@@ -1,5 +1,4 @@
 import productsModel from "../models/products.models.js";
-import mongoose from "mongoose";
 
 class ProductManagerMongo {
   async getProducts() {
@@ -12,7 +11,7 @@ class ProductManagerMongo {
 
   async getProductById(pid) {
     try {
-      return await productsModel.findById({ _id: pid });
+      return await productsModel.findOne({ _id: pid });
     } catch (error) {
       console.error(error);
     }
@@ -56,8 +55,8 @@ class ProductManagerMongo {
     }
   }
 
-  async getProductCode(code){
-    return await productsModel.findOne({code})
+  async getProductCode(code) {
+    return await productsModel.findOne({ code });
   }
 }
 

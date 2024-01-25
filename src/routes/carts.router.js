@@ -7,7 +7,8 @@ router
   .get("/:cid", async (req, res) => {
     try {
       const { cid } = req.params;
-      const cart = await cartsModel.findById(cid)
+      const cart = await cartsModel.findOne({ _id: cid });
+      console.log(cart.products);
       res.send({
         status: "succes",
         payload: cart,
@@ -19,7 +20,7 @@ router
 
   .post("/", async (req, res) => {
     try {
-      const result = await cartsModel.create();
+      const result = await cartsModel.create({ products: [] });
       res.send({
         status: "succes",
         payload: result,
@@ -31,13 +32,13 @@ router
 
   .post("/:cid/product/:pid", async (req, res) => {
     try {
-      const { product, quantity } = req.body;
-      const cart = await cartsModel.create({
-        product: [{ product, quantity }],
-      });
+      const { cid, pid } = req.params;
+      const cart = await cartsModel.findById({ _id: cid });
+      cart.products.push({ product: pid });
+      let result = await cartsModel.findByIdAndUpdate({ _id: cid }, cart);
       res.send({
         status: "succes",
-        cart,
+        payload: result,
       });
     } catch (error) {
       res.status(500).send(`Error de servidor. ${error.message}`);

@@ -68,12 +68,12 @@ function addProduct() {
   clear();
 }
 
-socket.on('exisitingCode', (data) => {
+socket.on("exisitingCode", (data) => {
   Swal.fire({
     title: "Este producto ya existe!",
-    text: `El codigo ${data.data} ya existe en el listado de productos.`
+    text: `El codigo ${data.data} ya existe en el listado de productos.`,
   });
-})
+});
 
 function clear() {
   document.getElementById("title").value = "";
@@ -147,7 +147,11 @@ function updateProductId(
             stock,
             category,
           });
-          Swal.fire('Actualizado', 'El producto ha sido actualizado correctamente.', 'success');
+          Swal.fire(
+            "Actualizado",
+            "El producto ha sido actualizado correctamente.",
+            "success"
+          );
         },
       });
     }
