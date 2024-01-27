@@ -22,7 +22,7 @@
 
   <div id="productList">
     <h1>Lista de productos:</h1>
-    {{#each product}}
+    {{#each products}}
     <div id="{{_id}}">
       <h4>{{code}}: {{title}}</h4>
       <p>ID de producto: {{_id}}</p>
@@ -33,6 +33,13 @@
       <button type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
     </div>
     {{/each}}
+    {{#if hasPrevPage}}
+    <a href="/realtimeproducts?pageQuery={{prevPage}}">Anterior</a>
+    {{/if}}
+    <label id="page">{{page}}</label>
+    {{#if hasNextPage}}
+    <a href="/realtimeproducts?pageQuery={{nextPage}}">Siguiente</a>
+    {{/if}}
   </div>
 
 </div>

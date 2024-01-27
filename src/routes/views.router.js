@@ -7,11 +7,18 @@ const managerMongo = new ProductManagerMongo();
 router
   .get("/", async (req, res) => {
     try {
-      const products = await managerMongo.getProducts();
-      const product = products.map((product) => ({
-        ...product.toObject(),
-      }));
-      res.render("realtimeproducts", { product, style: "index.css" });
+      const { limit, pageQuery, query, sort } = req.query;
+      const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+        await managerMongo.getProducts(limit, pageQuery, query, sort);
+      res.render("realtimeproducts", {
+        products: docs,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        nextPage,
+        page,
+        style: "index.css",
+      });
     } catch (error) {
       console.log(error);
       res.render("Error al obtener la lista de productos!");

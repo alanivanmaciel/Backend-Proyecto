@@ -8,7 +8,6 @@ router
     try {
       const { cid } = req.params;
       const cart = await cartsModel.findOne({ _id: cid });
-      console.log(cart.products);
       res.send({
         status: "succes",
         payload: cart,

@@ -2,28 +2,49 @@ const socket = io();
 
 socket.on("updateProducts", (data) => {
   const productList = document.getElementById("productList");
-
   if (productList && Array.isArray(data.products)) {
     productList.innerHTML = "";
     const h1 = document.createElement("h1");
     h1.textContent = "Lista de productos:";
     productList.appendChild(h1);
-    data.products.forEach((product) => {
-      const id = product._id.toString();
-      const productContainer = document.createElement("div");
-      const parametro = "id";
-      productContainer.setAttribute(parametro, id);
-      productContainer.innerHTML = ` 
-      <h4>${product.code}: ${product.title}</h4>
-      <p>ID de producto: ${id}</p>
-      <p>${product.description} - $${product.price} - Stock: ${product.stock}</p>
-      <button type="button"
-      onclick="updateProductId('${id}','${product.code}','${product.title}','${product.description}','${product.price}','${product.thumbnail}','${product.stock}','${product.category}')">Actualizar
-      producto</button>
-      <button type="button" onclick="deleteProduct('${id}')">Eliminar producto</button>   
-    `;
-      productList.appendChild(productContainer);
-    });
+
+    const products = data.products;
+    if (products.length === 0) {
+      const noProductsMessage = document.createElement("p");
+      noProductsMessage.textContent = "No hay productos disponibles.";
+      productList.appendChild(noProductsMessage);
+    } else {
+      products.forEach((product) => {
+        const id = product._id.toString();
+        const productContainer = document.createElement("div");
+        const parametro = "id";
+        productContainer.setAttribute(parametro, id);
+        productContainer.innerHTML = ` 
+          <h4>${product.code}: ${product.title}</h4>
+          <p>ID de producto: ${id}</p>
+          <p>${product.description} - $${product.price} - Stock: ${product.stock}</p>
+          <button type="button" onclick="updateProductId('${id}','${product.code}','${product.title}','${product.description}','${product.price}','${product.thumbnail}','${product.stock}','${product.category}')">Actualizar producto</button>
+          <button type="button" onclick="deleteProduct('${id}')">Eliminar producto</button>   
+        `;
+        productList.appendChild(productContainer);
+      });
+      if (data.hasPrevPage) {
+        const prevPageLink = document.createElement("a");
+        prevPageLink.href = `/realtimeproducts?pageQuery=${data.prevPage}`;
+        prevPageLink.textContent = "Anterior";
+        productList.appendChild(prevPageLink);
+      }
+      const label = document.createElement("label");
+      label.textContent = data.page;
+      productList.appendChild(label);
+
+      if (data.hasNextPage) {
+        const nextPageLink = document.createElement("a");
+        nextPageLink.href = `/realtimeproducts?pageQuery=${data.nextPage}`;
+        nextPageLink.textContent = "Siguiente";
+        productList.appendChild(nextPageLink);
+      }
+    }
   } else {
     console.log("Error: La estructura de datos de 'data' no es válida.");
   }
@@ -145,7 +166,7 @@ function updateProductId(
             price,
             thumbnail,
             stock,
-            category,
+            category
           });
           Swal.fire(
             "Actualizado",

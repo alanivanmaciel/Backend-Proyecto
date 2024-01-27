@@ -1,9 +1,27 @@
 import productsModel from "../models/products.models.js";
 
 class ProductManagerMongo {
-  async getProducts() {
+  async getProducts(limit = 10, pageQuery = 1, query, sort) {
     try {
-      return await productsModel.find({ isActive: true });
+      let filter = { isActive: true };
+
+      if (query) {
+        const queryParts = query.split(":");
+        if (queryParts.length === 2) {
+          const [field, value] = queryParts;
+          filter[field] = value;
+        } else {
+          console.error("Formato de consulta no válido:", query);
+        }
+      }
+      const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+        await productsModel.paginate(filter, {
+          limit,
+          page: pageQuery,
+          sort: { price: sort === "asc" ? 1 : -1 },
+          lean: true,
+        });
+      return { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page };
     } catch (error) {
       console.error(error);
     }
@@ -29,6 +47,7 @@ class ProductManagerMongo {
           thumbnail: data.thumbnail,
           stock: data.stock,
           category: data.category,
+          page: data.page,
         }
       );
     } catch (error) {

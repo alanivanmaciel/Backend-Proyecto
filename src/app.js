@@ -55,21 +55,45 @@ io.on("connection", (socket) => {
     }
 
     await managerMongo.createproduct(newProduct);
-    const updateProducts = await managerMongo.getProducts();
-    io.emit("updateProducts", { products: updateProducts });
+    const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+      await managerMongo.getProducts();
+    io.emit("updateProducts", {
+      products: docs,
+      hasPrevPage,
+      hasNextPage,
+      prevPage,
+      nextPage,
+      page,
+    });
   });
 
   socket.on("deleteProduct", async (data) => {
     const pid = data.idProduct;
     await managerMongo.deleteProduct(pid);
-    const updateProducts = await managerMongo.getProducts();
-    io.emit("updateProducts", { products: updateProducts });
+    const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+      await managerMongo.getProducts();
+    io.emit("updateProducts", {
+      products: docs,
+      hasPrevPage,
+      hasNextPage,
+      prevPage,
+      nextPage,
+      page,
+    });
   });
 
   socket.on("updateProductId", async (data) => {
     await managerMongo.updateProduct(data);
-    const updateProducts = await managerMongo.getProducts();
-    io.emit("updateProducts", { products: updateProducts });
+    const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+      await managerMongo.getProducts();
+    io.emit("updateProducts", {
+      products: docs,
+      hasPrevPage,
+      hasNextPage,
+      prevPage,
+      nextPage,
+      page,
+    });
   });
 
   socket.on("getMessages", async (data) => {
@@ -84,6 +108,3 @@ io.on("connection", (socket) => {
     io.emit("messageLogs", message);
   });
 });
-
-
-//1.16
