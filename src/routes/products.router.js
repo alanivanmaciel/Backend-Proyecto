@@ -20,9 +20,9 @@ router
   .get("/:pid", async (req, res) => {
     try {
       const { pid } = req.params;
-      console.log('router');
+      console.log("router");
       const productId = await productManager.getProductById(Number(pid));
-      res.render({productId, style: "index.css"});
+      res.render({ productId, style: "index.css" });
     } catch (error) {
       console.log(error);
       res.status(500).send("Error al obtener al intentar obtener el producto.");
@@ -49,11 +49,9 @@ router
       });
     } catch (error) {
       console.error("Error al intentar actualizar el producto:", error);
-      res
-        .status(500)
-        .json({
-          error: "Error interno del servidor al actualizar el producto.",
-        });
+      res.status(500).json({
+        error: "Error interno del servidor al actualizar el producto.",
+      });
     }
   })
 

@@ -21,7 +21,22 @@ class ProductManagerMongo {
           sort: { price: sort === "asc" ? 1 : -1 },
           lean: true,
         });
-      return { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page };
+      return {
+        status: "success",
+        payload: docs,
+        totalPages: Math.ceil(docs.length / limit),
+        prevPage,
+        nextPage,
+        page,
+        hasPrevPage,
+        hasNextPage,
+        prevLink: hasPrevPage
+          ? `/realtimeproducts?pageQuery=${prevPage}`
+          : null,
+        nextLink: hasNextPage
+          ? `/realtimeproducts?pageQuery=${nextPage}`
+          : null,
+      };
     } catch (error) {
       console.error(error);
     }

@@ -8,15 +8,22 @@ router
   .get("/", async (req, res) => {
     try {
       const { limit, pageQuery, query, sort } = req.query;
-      const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
-        await managerMongo.getProducts(limit, pageQuery, query, sort);
+      const result = await managerMongo.getProducts(
+        limit,
+        pageQuery,
+        query,
+        sort
+      );
+      console.log(result);
       res.render("realtimeproducts", {
-        products: docs,
-        hasPrevPage,
-        hasNextPage,
-        prevPage,
-        nextPage,
-        page,
+        status: result.status,
+        payload: result.payload,
+        totalPages: result.totalPages,
+        hasPrevPage: result.hasPrevPage,
+        hasNextPage: result.hasNextPage,
+        prevLink: result.prevLink,
+        nextLink: result.nextLink,
+        page: result.page,
         style: "index.css",
       });
     } catch (error) {

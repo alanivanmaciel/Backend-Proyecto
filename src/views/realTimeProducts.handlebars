@@ -22,7 +22,7 @@
 
   <div id="productList">
     <h1>Lista de productos:</h1>
-    {{#each products}}
+    {{#each payload}}
     <div id="{{_id}}">
       <h4>{{code}}: {{title}}</h4>
       <p>ID de producto: {{_id}}</p>
@@ -34,11 +34,11 @@
     </div>
     {{/each}}
     {{#if hasPrevPage}}
-    <a href="/realtimeproducts?pageQuery={{prevPage}}">Anterior</a>
+    <a href={{prevLink}}>Anterior</a>
     {{/if}}
     <label id="page">{{page}}</label>
     {{#if hasNextPage}}
-    <a href="/realtimeproducts?pageQuery={{nextPage}}">Siguiente</a>
+    <a href={{nextLink}}>Siguiente</a>
     {{/if}}
   </div>
 

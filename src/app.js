@@ -70,10 +70,10 @@ io.on("connection", (socket) => {
   socket.on("deleteProduct", async (data) => {
     const pid = data.idProduct;
     await managerMongo.deleteProduct(pid);
-    const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+    const { payload, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
       await managerMongo.getProducts();
     io.emit("updateProducts", {
-      products: docs,
+      products: payload,
       hasPrevPage,
       hasNextPage,
       prevPage,
@@ -84,10 +84,10 @@ io.on("connection", (socket) => {
 
   socket.on("updateProductId", async (data) => {
     await managerMongo.updateProduct(data);
-    const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+    const { payload, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
       await managerMongo.getProducts();
     io.emit("updateProducts", {
-      products: docs,
+      products: payload,
       hasPrevPage,
       hasNextPage,
       prevPage,
