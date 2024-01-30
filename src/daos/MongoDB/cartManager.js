@@ -9,6 +9,25 @@ class CartManagerMongo {
     }
   }
 
+  async createCart() {
+    try {
+      return await cartsModel.create({ products: [] });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async addProductToCart(cid, pid) {
+    try {
+      const cart = await cartsModel.findById({ _id: cid });
+      cart.products.push({ product: pid });
+      let result = await cartsModel.findByIdAndUpdate({ _id: cid }, cart);
+      return result;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async deleteProductToCart(cid, pid) {
     try {
       const cart = await cartsModel.findOne({ _id: cid });
@@ -23,6 +42,21 @@ class CartManagerMongo {
         } else {
           return "Producto no encontrado en el carrito";
         }
+      } else {
+        return "Carrito no encontrado.";
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async deleteProducts(cid) {
+    try {
+      const cart = await cartsModel.findOne({ _id: cid });
+      if (cart) {
+        cart.products = [];
+        await cart.save();
+        return "Todos los productos del carrito fueron eliminados.";
       } else {
         return "Carrito no encontrado.";
       }

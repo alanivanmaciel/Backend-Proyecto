@@ -8,6 +8,7 @@ import appRouter from "./routes/index.js";
 import connectDB from "./config/connectDB.js";
 import ProductManagerMongo from "./daos/MongoDB/productManager.js";
 import messageModel from "./daos/models/message.models.js";
+import CartManagerMongo from "./daos/MongoDB/cartManager.js";
 
 const app = express();
 const PORT = 8080;
@@ -33,6 +34,7 @@ const httpServer = app.listen(PORT, (err) => {
 
 const io = new Server(httpServer);
 const managerMongo = new ProductManagerMongo();
+const cartManager = new CartManagerMongo();
 
 io.on("connection", (socket) => {
   console.log("Nuevo cliente conectado.");
@@ -94,6 +96,18 @@ io.on("connection", (socket) => {
       nextPage,
       page,
     });
+  });
+
+  socket.on("addToCart", async (_id) => {
+    try {
+      const pid = _id;
+      const cart = await cartManager.createCart();
+      const cid = cart._id.toString();
+      await cartManager.addProductToCart(cid, pid);
+      io.emit("addToCartSucces", data);
+    } catch (error) {
+      return `Error de servidor. ${error}`;
+    }
   });
 
   socket.on("getMessages", async (data) => {

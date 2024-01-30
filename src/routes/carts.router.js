@@ -22,7 +22,7 @@ router
 
   .post("/", async (req, res) => {
     try {
-      const result = await cartsModel.create({ products: [] });
+      const result = await cartManager.createCart();
       res.send({
         status: "succes",
         payload: result,
@@ -32,12 +32,10 @@ router
     }
   })
 
-  .post("/:cid/product/:pid", async (req, res) => {
+  .put("/:cid/product/:pid", async (req, res) => {
     try {
       const { cid, pid } = req.params;
-      const cart = await cartsModel.findById({ _id: cid });
-      cart.products.push({ product: pid });
-      let result = await cartsModel.findByIdAndUpdate({ _id: cid }, cart);
+      const result = await cartManager.addProductToCart(cid, pid);
       res.send({
         status: "succes",
         payload: result,
@@ -63,6 +61,15 @@ router
         error: "Error interno del servidor al actualizar el producto.",
       });
     }
+  })
+
+  .delete("/:cid", async (req, res) => {
+    const { cid } = req.params;
+    const cart = await cartManager.deleteProducts({ _id: cid });
+    res.send({
+      status: "succes",
+      payload: cart,
+    });
   })
 
   .delete("/:cid/products/:pid", async (req, res) => {

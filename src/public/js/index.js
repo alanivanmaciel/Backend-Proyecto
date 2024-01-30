@@ -89,6 +89,10 @@ function addProduct() {
   clear();
 }
 
+function addToCart(_id) {
+  socket.emit("addToCart", _id);
+}
+
 socket.on("exisitingCode", (data) => {
   Swal.fire({
     title: "Este producto ya existe!",
@@ -166,7 +170,7 @@ function updateProductId(
             price,
             thumbnail,
             stock,
-            category
+            category,
           });
           Swal.fire(
             "Actualizado",
@@ -182,3 +186,21 @@ function updateProductId(
 function deleteProduct(idProduct) {
   socket.emit("deleteProduct", { idProduct });
 }
+
+socket.on("addToCartSucces", (data) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+  Toast.fire({
+    icon: "success",
+    title: "Producto agregado al carrito.",
+  });
+});
