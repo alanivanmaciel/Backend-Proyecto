@@ -1,9 +1,16 @@
 <div>
     <h1>Carrito</h1>
-    {{#each payload.products}}
+    {{#each payload}}
+    <div>
         <p>Product ID: {{_id}}</p>
+        <p>Title: {{title}}</p>
+        <p>Description: {{description}}</p>
+        <p>Price: {{price}}</p>
+    </div>
     {{/each}}
 </div>
+
+
 
 
 

@@ -8,12 +8,21 @@ router
   .get("/:cid", async (req, res) => {
     try {
       const { cid } = req.params;
-      const  cart  = await cartManager.getCart({ _id: cid });
-      console.log("Cart retrieved:", cart);
+      const cart = await cartManager.getCart({ _id: cid });
+      const products = cart.products.map((item) => {
+        const productDetails = item.product;
+        return {
+          _id: productDetails._id.toString(),
+          title: productDetails.title,
+          description: productDetails.description,
+          price: productDetails.price,
+        };
+      });
+
 
       res.render("carts", {
         status: "succes",
-        payload: cart,
+        payload: products,
         style: "index.css",
       });
     } catch (error) {
