@@ -187,20 +187,16 @@ function deleteProduct(idProduct) {
   socket.emit("deleteProduct", { idProduct });
 }
 
-socket.on("addToCartSucces", (data) => {
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
-  Toast.fire({
+socket.on("addToCartSucces", (cart) => {
+  Swal.fire({
     icon: "success",
     title: "Producto agregado al carrito.",
+    position: "bottom-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: {
+      popup: "custom-toast",
+    },
   });
 });

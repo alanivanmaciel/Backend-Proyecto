@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
       const cart = await cartManager.createCart();
       const cid = cart._id.toString();
       await cartManager.addProductToCart(cid, pid);
-      io.emit("addToCartSucces", data);
+      io.emit("addToCartSucces", cart);
     } catch (error) {
       return `Error de servidor. ${error}`;
     }

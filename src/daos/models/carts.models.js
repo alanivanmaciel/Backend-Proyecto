@@ -16,9 +16,9 @@ const cartsSchema = new Schema({
   },
 });
 
-cartsSchema.pre('findOne', function () {
-    this.populate('products.product')
-})
+cartsSchema.pre("findOne", function () {
+  this.populate("products.product");
+});
 
 const cartsModel = model(cartsCollection, cartsSchema);
 

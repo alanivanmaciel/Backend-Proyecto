@@ -1,36 +1,40 @@
 body {
-    margin: 0px;
-    background-color: black;
-    color: white;
+  margin: 0px;
+  background-color: black;
+  color: white;
 }
 
 .addProduct {
-    padding: 10px;
-    text-align: center;
+  padding: 10px;
+  text-align: center;
 }
 
-.productList{
-    color: yellow;
-    text-align: center;
-    display: inline-block;
+.productList {
+  color: yellow;
+  text-align: center;
+  display: inline-block;
 }
 
-.chatContainer { 
-    top: 0px;
-    background-color: darkslategrey;
-    text-align: center;
-    color: white;
+.chatContainer {
+  top: 0px;
+  background-color: darkslategrey;
+  text-align: center;
+  color: white;
 }
 
 .chatContainer h1 {
-    margin-top: 0px;
-    padding-top: 10px;
+  margin-top: 0px;
+  padding-top: 10px;
 }
 
 .chatContainer li {
-    list-style: none;
+  list-style: none;
 }
 
 #chatbox {
-    margin: 10px;
+  margin: 10px;
+}
+
+.custom-toast {
+  font-size: 8px;
 }

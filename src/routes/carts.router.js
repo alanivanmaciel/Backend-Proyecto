@@ -1,22 +1,23 @@
-import Router from "express";
-import cartsModel from "../daos/models/carts.models.js";
+import { Router } from "express";
 import CartManagerMongo from "../daos/MongoDB/cartManager.js";
 
-const cartManager = new CartManagerMongo();
-
 const router = Router();
+const cartManager = new CartManagerMongo();
 
 router
   .get("/:cid", async (req, res) => {
     try {
       const { cid } = req.params;
-      const cart = await cartManager.getCart({ _id: cid });
-      res.send({
+      const  cart  = await cartManager.getCart({ _id: cid });
+      console.log("Cart retrieved:", cart);
+
+      res.render("carts", {
         status: "succes",
         payload: cart,
+        style: "index.css",
       });
     } catch (error) {
-      res.status(500).send(`Error de servidor. ${error.message}`);
+      res.status(500).send(`Error de servidor get. ${error.message}`);
     }
   })
 
