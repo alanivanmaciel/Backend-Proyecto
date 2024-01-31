@@ -19,7 +19,6 @@ router
         };
       });
 
-
       res.render("carts", {
         status: "succes",
         payload: products,
