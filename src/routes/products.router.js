@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
       query,
       sort
     );
-    res.render("realtimeproducts", {
+    res.render("products", {
       status: result.status,
       payload: result.payload,
       totalPages: result.totalPages,
