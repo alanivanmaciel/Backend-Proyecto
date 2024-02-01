@@ -9,6 +9,7 @@ import connectDB from "./config/connectDB.js";
 import ProductManagerMongo from "./daos/MongoDB/productManager.js";
 import messageModel from "./daos/models/message.models.js";
 import CartManagerMongo from "./daos/MongoDB/cartManager.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = 8080;
@@ -19,11 +20,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 
-app.use(appRouter);
+app.use(cookieParser());
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
+
+app.get('/setCookie', (req, res) => {
+  res.cookie('CoderC', 'Esto es un cookie', { maxAge: 10000}).send('Seteando cookie')
+})
+
+app.use(appRouter);
 
 app.use(express.static(__dirname + "/public"));
 
@@ -122,3 +129,5 @@ io.on("connection", (socket) => {
     io.emit("messageLogs", message);
   });
 });
+
+//28.05
