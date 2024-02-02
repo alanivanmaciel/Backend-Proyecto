@@ -27,7 +27,16 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 app.get('/setCookie', (req, res) => {
-  res.cookie('CoderC', 'Esto es un cookie', { maxAge: 10000}).send('Seteando cookie')
+  res.cookie('CoderC', 'Esto es un cookie', { maxAge: 100000}).send('Seteando cookie')
+})
+
+app.get('/getCookie', (req, res) => {
+  console.log(req.cookies);
+  res.send(req.cookies)
+})
+
+app.get('/deleteCookie', (req, res) => {
+  res.clearCookie('CoderC').send('Cookie borrado.')
 })
 
 app.use(appRouter);

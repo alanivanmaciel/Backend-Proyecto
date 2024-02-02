@@ -23,6 +23,7 @@ socket.on("updateProducts", (data) => {
           <h4>${product.code}: ${product.title}</h4>
           <p>ID de producto: ${id}</p>
           <p>${product.description} - $${product.price} - Stock: ${product.stock}</p>
+          <button type="button" onclick="addToCart('{{_id}}')">Agregar al carrito</button>
           <button type="button" onclick="updateProductId('${id}','${product.code}','${product.title}','${product.description}','${product.price}','${product.thumbnail}','${product.stock}','${product.category}')">Actualizar producto</button>
           <button type="button" onclick="deleteProduct('${id}')">Eliminar producto</button>   
         `;
