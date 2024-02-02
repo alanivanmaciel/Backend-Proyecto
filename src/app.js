@@ -20,24 +20,41 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 
-app.use(cookieParser());
+app.use(cookieParser("palabrasecreta"));
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-app.get('/setCookie', (req, res) => {
-  res.cookie('CoderC', 'Esto es un cookie', { maxAge: 100000}).send('Seteando cookie')
-})
+app.get("/setCookie", (req, res) => {
+  res
+    .cookie("CoderC", "Esto es un cookie", { maxAge: 100000 })
+    .send("Seteando cookie");
+});
 
-app.get('/getCookie', (req, res) => {
+app.get("/getCookie", (req, res) => {
   console.log(req.cookies);
-  res.send(req.cookies)
-})
+  res.send(req.cookies);
+});
 
-app.get('/deleteCookie', (req, res) => {
-  res.clearCookie('CoderC').send('Cookie borrado.')
-})
+app.get("/setCookieSigned", (req, res) => {
+  res
+    .cookie("CoderC", "Esto es un cookie firmada", {
+      maxAge: 100000,
+      signed: true,
+    })
+    .send("Seteando cookie");
+});
+
+app.get("/getCookieSigned", (req, res) => {
+  console.log(req.cookies);
+  console.log(req.signedCookies);
+  res.send(req.cookies);
+});
+
+app.get("/deleteCookie", (req, res) => {
+  res.clearCookie("CoderC").send("Cookie borrado.");
+});
 
 app.use(appRouter);
 
@@ -139,4 +156,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//28.05
+//44
