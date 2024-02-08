@@ -14,6 +14,16 @@ router
         res.send('Login success')
     })
 
+    .post('/register', (req, res) => {
+        const { firtsname, lastname, email, age, password } = req.body
+        if (email === '' || password === '') return res.send('Todos los campos deben ser obligatorios.')
+        //3.35
+        req.session.username = 'ivan'
+        req.session.admin = true
+
+        res.send('Login success')
+    })
+
     .post('/logout', (req, res) => {
         req.session.destroy(error => {
             if (error) return res.send('Logout error.')
@@ -24,7 +34,7 @@ router
     .get('/current', auth, (req, res) => {
         res.send('Datos Sensibles')
     })
-    
+
     .get('/session', (req, res) => {
         if (req.session.counter) {
             req.session.counter++
