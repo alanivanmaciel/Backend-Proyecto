@@ -3,8 +3,8 @@ import { Schema, model } from "mongoose";
 const usersCollection = "users";
 
 const usersSchema = new Schema({
-  firs_name: String,
-  last_name: String,
+  firstname: String,
+  lastname: String,
   email: {
     type: String,
     unique: true,
@@ -13,6 +13,12 @@ const usersSchema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  age: Number,
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
   },
   isActive: {
     type: Boolean,

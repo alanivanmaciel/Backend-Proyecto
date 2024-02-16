@@ -1,30 +1,42 @@
 import { Router } from "express";
 import auth from "../middleware/authentication.middleware.js";
+import UserManagerMongo from "../daos/MongoDB/userManager.js";
 
 const router = Router();
+const usersManager = new UserManagerMongo()
 
 router
-    .post('/login', (req, res) => {
-        const { username, password } = req.body
-        if (username !== 'ivan' || password !== '1234') return res.send('Login Failed')
+    .post('/login', async (req, res) => {
+        const { email, password } = req.body
+        
+        const user = await usersManager.getUserBy({ email })
+        if(!user) return res.send({status: 'error', error: 'El mail ingresado no existe.'})
 
-        req.session.username = 'ivan'
-        req.session.admin = true
-
-        res.send('Login success')
-    })
-
-    .post('/register', (req, res) => {
-        const { firtsname, lastname, email, age, password } = req.body
-        if (email === '' || password === '') return res.send('Todos los campos deben ser obligatorios.')
-        //3.35
-        req.session.username = 'ivan'
-        req.session.admin = true
+        req.session.user = {id: user._id, username: user.firstname, admin: true}
 
         res.send('Login success')
     })
 
-    .post('/logout', (req, res) => {
+    .post('/register', async (req, res) => {
+        try {
+            const { firstname, lastname, email, age, password } = req.body
+            if (email === '' || password === '') return res.send('Todos los campos deben ser obligatorios.')
+            const newUser = {
+                firstname,
+                lastname,
+                email,
+                age,
+                password
+            }
+            const result = await usersManager.createUser(newUser)
+
+            res.send({ status: 'Success', payload: newUser })
+        } catch (error) {
+            res.send({ status: 'error', error: error })
+        }
+    })
+
+    .get('/logout', (req, res) => {
         req.session.destroy(error => {
             if (error) return res.send('Logout error.')
             res.send({ status: 'succes', message: 'Logout ok.' })

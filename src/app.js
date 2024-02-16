@@ -43,7 +43,7 @@ app.use(session({
       useNewUrlParser: true,
       useUnifiedTopology: true
     },
-    ttl: 15
+    ttl: 60 * 60 * 1000 * 24
   }),
   secret: 'palabraSecreta',
   resave: true,
@@ -154,4 +154,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//3.31
+//3.41
