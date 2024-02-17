@@ -147,9 +147,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//2.33
-// App ID: 831625
-
-// Client ID: Iv1.545d12c63f15cb78
-
-// ad7c627e6c0b315e3c82f0f91ff35427e3098c9f
+//3.29
