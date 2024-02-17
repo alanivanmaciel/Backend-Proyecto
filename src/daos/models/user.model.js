@@ -12,7 +12,6 @@ const usersSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   age: Number,
   role: {

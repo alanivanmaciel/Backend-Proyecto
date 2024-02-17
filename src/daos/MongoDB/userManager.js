@@ -12,6 +12,10 @@ class UserManagerMongo {
     async getUserBy(filter) {
         return await usersModel.findOne(filter)
     }
+
+    async getUserById(filter) {
+        return await usersModel.findById(filter)
+    }
 }
 
 export default UserManagerMongo

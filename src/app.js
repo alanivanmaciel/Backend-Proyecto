@@ -11,8 +11,10 @@ import messageModel from "./daos/models/message.models.js";
 import CartManagerMongo from "./daos/MongoDB/cartManager.js";
 import cookieParser from "cookie-parser";
 import session from 'express-session'
-import FileStore from 'session-file-store'
 import MongoStore from 'connect-mongo'
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
+
 
 const app = express();
 const PORT = 8080;
@@ -23,18 +25,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(cookieParser("palabrasecreta"));
-
-// const fileStore = FileStore(session)
-// app.use(session({
-//   store: new fileStore({
-//     path: './sessions',
-//     ttl: 100,
-//     retries: 0
-//   }),
-//   secret: 'palabraSecreta',
-//   resave: true,
-//   saveUninitialized: true
-// }))
 
 app.use(session({
   store: MongoStore.create({
@@ -49,6 +39,9 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -154,4 +147,9 @@ io.on("connection", (socket) => {
   });
 });
 
-//3.41
+//2.33
+// App ID: 831625
+
+// Client ID: Iv1.545d12c63f15cb78
+
+// ad7c627e6c0b315e3c82f0f91ff35427e3098c9f

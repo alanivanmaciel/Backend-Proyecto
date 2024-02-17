@@ -1,39 +1,42 @@
 import { Router } from "express";
 import auth from "../middleware/authentication.middleware.js";
 import UserManagerMongo from "../daos/MongoDB/userManager.js";
+import { createHash, isValidPassword } from "../utils/hashBcrypt.js";
+import passport from "passport";
 
 const router = Router();
 const usersManager = new UserManagerMongo()
 
 router
-    .post('/login', async (req, res) => {
-        const { email, password } = req.body
-        
-        const user = await usersManager.getUserBy({ email })
-        if(!user) return res.send({status: 'error', error: 'El mail ingresado no existe.'})
-
-        req.session.user = {id: user._id, username: user.firstname, admin: true}
-
-        res.send('Login success')
+    .post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), async (req, res) => {
+        res.send({ status: 'Success', message: 'Usuario registrado correctamente.' })
     })
 
-    .post('/register', async (req, res) => {
-        try {
-            const { firstname, lastname, email, age, password } = req.body
-            if (email === '' || password === '') return res.send('Todos los campos deben ser obligatorios.')
-            const newUser = {
-                firstname,
-                lastname,
-                email,
-                age,
-                password
-            }
-            const result = await usersManager.createUser(newUser)
+    .get('/failregister', async (req, res) => {
+        res.send({ error: 'Fallo el registro de usuario.' })
+    })
 
-            res.send({ status: 'Success', payload: newUser })
-        } catch (error) {
-            res.send({ status: 'error', error: error })
+    .post('/login', passport.authenticate('login', { failureRedirect: '/api/sessions/faillogin' }), async (req, res) => {
+        if (!req.user) return res.status(401).send({ status: 'error', error: 'Usuario o clave incorrecta.' })
+
+        req.session.user = {
+            firstname: req.user.firstname,
+            lastname: req.user.lastname,
+            email: req.user.email,
+            id: req.user._id
         }
+
+        res.send({ status: 'succes', message: req.user })
+    })
+
+    .get('/faillogin', async (req, res) => {
+        res.send({ error: 'Fallo el inicio de sesion.' })
+    })
+
+    .get('/github', passport.authenticate('github', {scope:['user: email']}), async (req, res) => {})
+    .get('/githubcallback', passport.authenticate('github', {failureRedirect: '/api/sessions/login'}), async (req, res) => {
+        req.session.user = req.user
+        res.redirect('/')
     })
 
     .get('/logout', (req, res) => {
@@ -45,45 +48,6 @@ router
 
     .get('/current', auth, (req, res) => {
         res.send('Datos Sensibles')
-    })
-
-    .get('/session', (req, res) => {
-        if (req.session.counter) {
-            req.session.counter++
-            res.send(`Ud a visitado el sitio ${req.session.counter} veces.`)
-        } else {
-            req.session.counter = 1
-            res.send('Bienvenido a la pagina.')
-        }
-    })
-    .get("/setCookie", (req, res) => {
-        res
-            .cookie("CoderC", "Esto es un cookie", { maxAge: 100000 })
-            .send("Seteando cookie");
-    })
-
-    .get("/getCookie", (req, res) => {
-        console.log(req.cookies);
-        res.send(req.cookies);
-    })
-
-    .get("/setCookieSigned", (req, res) => {
-        res
-            .cookie("CoderC", "Esto es un cookie firmada", {
-                maxAge: 100000,
-                signed: true,
-            })
-            .send("Seteando cookie");
-    })
-
-    .get("/getCookieSigned", (req, res) => {
-        console.log(req.cookies);
-        console.log(req.signedCookies);
-        res.send(req.cookies);
-    })
-
-    .get("/deleteCookie", (req, res) => {
-        res.clearCookie("CoderC").send("Cookie borrado.");
     })
 
 export default router;
