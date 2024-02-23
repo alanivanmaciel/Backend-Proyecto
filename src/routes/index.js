@@ -13,4 +13,8 @@ router.use("/api/products", productsRouter);
 router.use("/api/chat", messageRouter);
 router.use("/api/carts", cartsRouter);
 
-export default router;
+router.get('*', (req, res) => {
+    res.send('Not Found.')
+})
+
+export default router; 
