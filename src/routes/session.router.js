@@ -4,7 +4,6 @@ import { createHash, isValidPassword } from "../utils/hashBcrypt.js";
 import generateToken, { authToken } from "../utils/jsonWebToken.js";
 import { passportCall } from "../middleware/passportCall.js";
 import { authorization } from "../middleware/authorization.middleware.js";
-import bcrypt from 'bcrypt'
 
 // import auth from "../middleware/authentication.middleware.js";
 // import passport from "passport";
@@ -94,8 +93,6 @@ router.post('/login', async (req, res) => {
     if (!isValidPassword(password, hash)) return res.status(401).send({ status: 'error', message: 'No coincide las credenciales' })
 
     const token = generateToken({
-        firstname: user.firstname,
-        lastname: user.lastname,
         email: user.email,
         role: user.role
     })
@@ -108,9 +105,14 @@ router.post('/login', async (req, res) => {
         usersCreate: 'login success'
     })
 
-    router.get('/current', passportCall('jwt'), authorization('user'), async (req, res) => {
-        res.send('Datos Sensibles')
-    })
+})
+
+router.post('/logout', (req, res) => {
+    res.send('logout')
+})
+
+router.get('/current', passportCall('jwt'), authorization('user'), async (req, res) => {
+    res.send('Datos Sensibles session')
 })
 
 export default router;

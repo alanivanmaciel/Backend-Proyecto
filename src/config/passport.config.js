@@ -1,8 +1,9 @@
 import passport from 'passport'
 import passportJwt from 'passport-jwt'
-import GithubStrategy from 'passport-github2'
+// import GithubStrategy from 'passport-github2'
 // import { createHash, isValidPassword } from '../utils/hashBcrypt.js'
 import UserManagerMongo from '../daos/MongoDB/userManager.js'
+import { private_key } from '../utils/jsonWebToken.js'
 
 const userManager = new UserManagerMongo()
 const JWTStrategy = passportJwt.Strategy
@@ -91,7 +92,7 @@ const initializePassport = () => {
 
     passport.use('jwt', new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: 'palabrasecretaparatoken'
+        secretOrKey: private_key
     }, async (jwt_payload, done) => {
         try {
             return done(null, jwt_payload)
