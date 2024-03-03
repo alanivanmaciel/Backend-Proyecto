@@ -102,16 +102,16 @@ router.post('/login', async (req, res) => {
         httpOnly: true
     }).send({
         status: 'success',
-        usersCreate: 'login success'
+        usersCreate: {email: user.email, role: user.role}
     })
 
 })
 
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
     res.send('logout')
 })
 
-router.get('/current', passportCall('jwt'), authorization('user'), async (req, res) => {
+router.get('/current', passportCall('jwt'), authorization('admin'), async (req, res) => {
     res.send('Datos Sensibles session')
 })
 

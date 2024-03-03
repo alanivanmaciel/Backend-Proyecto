@@ -6,7 +6,25 @@ class UserManagerMongo {
     }
 
     async getUsers() {
-        return await usersModel.find({})
+        try {
+            const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+                await usersModel.paginate({
+                    limit: 3,
+                    page: 1,
+                    lean: true,
+
+                });
+                console.log('usermanager', docs);
+                
+            return {
+                status: 'success',
+                payload: docs,
+                page
+            };
+        } catch (error) {
+
+            console.error(error);
+        }
     }
 
     async getUserBy(filter) {

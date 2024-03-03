@@ -5,19 +5,16 @@ import __dirname from "./utils.js";
 import { Server } from "socket.io";
 
 import appRouter from "./routes/index.js";
-import connectDB from "./config/connectDB.js";
+import connectDB, { configObject } from "./config/connectDB.js";
 import ProductManagerMongo from "./daos/MongoDB/productManager.js";
 import messageModel from "./daos/models/message.models.js";
 import CartManagerMongo from "./daos/MongoDB/cartManager.js";
 import cookieParser from "cookie-parser";
-// import session from 'express-session'
-// import MongoStore from 'connect-mongo'
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 
-
 const app = express();
-const PORT = 8080;
+const PORT = configObject.port
 connectDB();
 
 app.get('/favicon.ico', (req, res) => res.status(204));
@@ -43,7 +40,6 @@ app.use(cookieParser());
 // }))
 initializePassport()
 app.use(passport.initialize())
-// app.use(passport.session())
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -147,4 +143,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//2.33
+//3.28

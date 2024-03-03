@@ -6,12 +6,17 @@ import { authorization } from "../middleware/authorization.middleware.js";
 const router = Router()
 const userManager = new UserManagerMongo()
 
-router.get('/', passportCall('jwt'), authorization(['user','admin']), async (req, res) => {
+router.get('/', passportCall('jwt'), authorization(['user', 'admin']), async (req, res) => {
     try {
         const users = await userManager.getUsers()
-        console.log(users);
-        
-        res.json({status: 'succes', result: users})
+
+        // console.log(users.payload); 
+
+        // res.json({ status: 'succes', result: users })
+        res.render('users', {
+            page: users.page,
+            users: users.payload
+        })
     } catch (error) {
         res.render(error)
         return

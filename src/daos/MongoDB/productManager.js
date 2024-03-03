@@ -21,6 +21,8 @@ class ProductManagerMongo {
           sort: { price: sort === "asc" ? 1 : -1 },
           lean: true,
         });
+        console.log('userproducts',docs);
+        
       return {
         status: "success",
         payload: docs,
