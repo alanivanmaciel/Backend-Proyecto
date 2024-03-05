@@ -14,10 +14,6 @@ export const configObject = {
   jwt_secret_Key: process.env.JWT_SECRET_KEY,
 }
 
-// console.log('url',process.env.MONGOURL);
-// console.log('port',process.env.PORT);
-
-
 const connectDB = async () => {
   try {
     await connect(process.env.MONGOURL);

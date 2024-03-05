@@ -1,38 +1,28 @@
 import usersModel from "../models/user.model.js";
 
 class UserManagerMongo {
-    async createUser(newUser) {
-        return await usersModel.create(newUser)
+    constructor() {
+        this.usersModel = usersModel
     }
 
-    async getUsers() {
-        try {
-            const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
-                await usersModel.paginate({
-                    limit: 3,
-                    page: 1,
-                    lean: true,
-
-                });
-                console.log('usermanager', docs);
-                
-            return {
-                status: 'success',
-                payload: docs,
-                page
-            };
-        } catch (error) {
-
-            console.error(error);
-        }
+    get = () => {
+        return this.usersModel.find({})
     }
 
-    async getUserBy(filter) {
-        return await usersModel.findOne(filter)
+    getBy = (filter) => {
+        return this.usersModel.findOne(filter)
     }
 
-    async getUserById(filter) {
-        return await usersModel.findById(filter)
+    create = (newUser) => {
+        return this.usersModel.create(newUser)
+    }
+
+    update = (uid, userToUpdate) => {
+        return this.usersModel.findByIdAndUpdate({ _id: uid }, userToUpdate, { new: true })
+    }
+
+    delete = (uid) => {
+        return this.usersModel.findByIdAndUpdate({ _id: uid }, { isActive: false })
     }
 }
 

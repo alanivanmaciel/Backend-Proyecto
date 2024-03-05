@@ -16,28 +16,13 @@ import initializePassport from "./config/passport.config.js";
 const app = express();
 const PORT = configObject.port
 connectDB();
-
 app.get('/favicon.ico', (req, res) => res.status(204));
-
 app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(cookieParser());
 
-// app.use(session({
-//   store: MongoStore.create({
-//     mongoUrl: "mongodb+srv://alanivanmaciel:unpbx@codercluster.ntazj2s.mongodb.net/eccomerce?retryWrites=true&w=majority",
-//     mongoOptions: {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true
-//     },
-//     ttl: 60 * 60 * 1000 * 24
-//   }),
-//   secret: 'palabraSecreta',
-//   resave: true,
-//   saveUninitialized: true
-// }))
 initializePassport()
 app.use(passport.initialize())
 
@@ -143,4 +128,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//3.28
+//2.28

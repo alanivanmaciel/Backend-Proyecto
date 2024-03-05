@@ -3,7 +3,7 @@ import { configObject } from '../config/connectDB.js'
 
 const { jwt_secret_Key } = configObject
 
-const generateToken = (user) => jwt.sign(user, jwt_secret_Key, { expiresIn: '24h' })
+export const generateToken = (user) => jwt.sign(user, jwt_secret_Key, { expiresIn: '24h' })
 
 export const authToken = (req, res, next) => {
     const authHeader = req.headers['authorization']
@@ -19,5 +19,3 @@ export const authToken = (req, res, next) => {
         next()
     })
 }
-
-export default generateToken

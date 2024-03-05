@@ -1,6 +1,10 @@
 import productsModel from "../models/products.models.js";
 
 class ProductManagerMongo {
+  constructor() {
+    this.service = productsModel
+  }
+  
   async getProducts(limit = 10, pageQuery = 1, query, sort) {
     try {
       let filter = { isActive: true };
@@ -21,7 +25,7 @@ class ProductManagerMongo {
           sort: { price: sort === "asc" ? 1 : -1 },
           lean: true,
         });
-        console.log('userproducts',docs);
+        // console.log('userproducts',docs);
         
       return {
         status: "success",

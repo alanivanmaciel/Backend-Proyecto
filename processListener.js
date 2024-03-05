@@ -1,9 +1,9 @@
 process.on('exit', code => {
     console.log('Antes de terminar el proceso:', code);    
 })
-process.on('', code => {
-    console.log('');    
+process.on('uncaughtException', exception => {
+    console.log('Atrapa un error no controlado', exception);    
 })
-process.on('', code => {
+process.on('Message', code => {
     console.log('');    
 })
