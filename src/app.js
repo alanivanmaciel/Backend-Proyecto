@@ -12,6 +12,7 @@ import CartManagerMongo from "./daos/MongoDB/cartManager.js";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+import cors from 'cors'
 
 const app = express();
 const PORT = configObject.port
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(cookieParser());
+app.use(cors())
 
 initializePassport()
 app.use(passport.initialize())
@@ -128,4 +130,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//2.28
+//3.47
