@@ -11,7 +11,7 @@ class SessionController {
         try {
             const { firstname, lastname, email, password } = req.body
 
-            const userNew = {
+            const newUser = {
                 firstname,
                 lastname,
                 email,
