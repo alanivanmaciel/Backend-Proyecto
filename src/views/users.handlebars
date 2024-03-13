@@ -1,12 +1,36 @@
-<div>
+<div class="Users">
+    <h1>Usuarios:</h1>
     <div id="users">
-        <h1>Lista de productos:</h1>
-        {{#each users}}
+        <table class="tableUsers">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Perfil</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                    <td>{{firstname}}</td>
+                    <td>{{lastname}}</td>
+                    <td>{{email}}</td>
+                    <td>{{role}}</td>
+                    <td>{{isActive}}</td>
+                    <td>
+                        <button onclick="editUser()">Editar</button>
+                        <button onclick="deleteUser()">delete</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
 
-        <label>email {{email}}</label>
-        {{/each}}
     </div>
-        <label id="page">{{page}}</label>
+    <label id="page">{{page}}</label>
 </div>
 
 {{!--

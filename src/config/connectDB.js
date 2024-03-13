@@ -1,4 +1,3 @@
-import { connect } from "mongoose";
 import dotenv from 'dotenv'
 import program from "../utils/commander.js";
 import MongoSingleton from "../utils/mongoSingleton.js";
@@ -13,14 +12,15 @@ export const configObject = {
   port: process.env.PORT || 8080,
   mongo_url: process.env.MONGOURL,
   jwt_secret_Key: process.env.JWT_SECRET_KEY,
+  persistence: process.env.PERSISTENCE,
 }
 
-const connectDB = async () => {
+export const connectDB = async () => {
   try {
-    await MongoSingleton.getInstance()
+    await MongoSingleton.getInstance(process.env.MONGOURL)
   } catch (error) {
     console.log(error);
   }
 };
 
-export default connectDB;
+// export default connectDB;

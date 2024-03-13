@@ -1,14 +1,14 @@
-import ProductManagerMongo from "../daos/MongoDB/productManager.js"
+import ProductDaoMongo from "../daos/MongoDB/productDaoMongo.js"
 
 class ProductController {
     constructor() {
-        this.service = new ProductManagerMongo()
+        this.service = new ProductDaoMongo()
     }
 
     getProducts = async (req, res) => {
         try {
           const { limit, pageQuery, query, sort } = req.query;
-          const result = await this.service.getProducts(
+          const result = await this.service.get(
             limit,
             pageQuery,
             query,

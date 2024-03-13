@@ -1,8 +1,8 @@
-import CartManagerMongo from "../daos/MongoDB/cartManager.js";
+import CartDaoMongo from "../daos/MongoDB/cartDaoMongo.js";
 
 class CartController {
     constructor() {
-        this.service = new CartManagerMongo
+        this.service = new CartDaoMongo
     }
 
     getCart = async (req, res) => {

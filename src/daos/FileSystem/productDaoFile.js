@@ -19,7 +19,32 @@ class ProductManager {
     }
   }
 
-  async addProduct(product) {
+  async get(limit) {
+    try {
+      const readProducts = await this.readJson();
+      if (Array.isArray(readProducts)) {
+        const limitProducts = limit
+          ? readProducts.slice(0, limit)
+          : readProducts;
+        return limitProducts;
+      }
+    } catch (error) {
+      console.log("No se encontraron productos.");
+    }
+  }
+
+  async getBy(id) {
+    const readProducts = await this.readJson();
+    const product = readProducts.find((product) => product.id === id);
+    if (product) {
+      return product;
+    } else {
+      
+      return (`ID de producto (${id}) no encontrado.`);
+    }
+  }
+
+  async create(product) {
     if (
       !product.title ||
       !product.description ||
@@ -54,33 +79,8 @@ class ProductManager {
       console.log("Error al registrar producto: ", error);
     }
   }
-
-  async getProducts(limit) {
-    try {
-      const readProducts = await this.readJson();
-      if (Array.isArray(readProducts)) {
-        const limitProducts = limit
-          ? readProducts.slice(0, limit)
-          : readProducts;
-        return limitProducts;
-      }
-    } catch (error) {
-      console.log("No se encontraron productos.");
-    }
-  }
-
-  async getProductById(id) {
-    const readProducts = await this.readJson();
-    const product = readProducts.find((product) => product.id === id);
-    if (product) {
-      return product;
-    } else {
-      
-      return (`ID de producto (${id}) no encontrado.`);
-    }
-  }
-
-  async updateProduct(id, prop, value) {
+  
+  async update(id, prop, value) {
     const readProducts = await this.readJson();
     const index = readProducts.findIndex((product) => product.id === id);
     if (index !== -1) {
@@ -93,7 +93,7 @@ class ProductManager {
     }
   }
 
-  async deleteProduct(id) {
+  async delete(id) {
     const readProducts = await this.readJson();
     const index = readProducts.findIndex((product) => product.id === id);
     if (index !== -1) {

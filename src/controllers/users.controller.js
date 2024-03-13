@@ -1,18 +1,31 @@
-import UserManagerMongo from "../daos/MongoDB/userManager.js";
+import userService from "../services/index.js"
 
 class UserController {
     constructor() {
-        this.service = new UserManagerMongo()
+        this.service = userService
     }
 
     getUsers = async (req, res) => {
         try {
-            const users = await this.service.get()
-            
-            res.send(users)
-            // res.render('users', { users })
+            const result = await this.service.getUsers()
+            // console.log(result);
+
+            const users = result.map(user => {
+
+                return {
+                    id: user._id.toString(),
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                    password: user.password,
+                    role: user.role,
+                    isActive: user.isActive ? 'Activo' : 'Inactivo',
+                }
+            })
+
+            res.render('users', { users })
         } catch (error) {
-            res.send({status: 'error', message: error})
+            res.send({ status: 'error', message: error })
         }
     }
 }

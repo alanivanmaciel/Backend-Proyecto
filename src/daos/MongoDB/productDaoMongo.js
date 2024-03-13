@@ -1,11 +1,11 @@
-import productsModel from "../models/products.models.js";
+import productsModel from "./models/products.models.js";
 
-class ProductManagerMongo {
+class ProductDaoMongo {
   constructor() {
     this.service = productsModel
   }
   
-  async getProducts(limit = 10, pageQuery = 1, query, sort) {
+  async get(limit = 10, pageQuery = 1, query, sort) {
     try {
       let filter = { isActive: true };
 
@@ -19,13 +19,12 @@ class ProductManagerMongo {
         }
       }
       const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
-        await productsModel.paginate(filter, {
+        await this.service.paginate(filter, {
           limit,
           page: pageQuery,
           sort: { price: sort === "asc" ? 1 : -1 },
           lean: true,
         });
-        // console.log('userproducts',docs);
         
       return {
         status: "success",
@@ -48,17 +47,25 @@ class ProductManagerMongo {
     }
   }
 
-  async getProductById(pid) {
+  async getBy(pid) {
     try {
-      return await productsModel.findOne({ _id: pid });
+      return await this.service.findOne({ _id: pid });
     } catch (error) {
       console.error(error);
     }
   }
 
-  async updateProduct(data) {
+  async create(newProduct) {
     try {
-      return await productsModel.findByIdAndUpdate(
+      return await this.service.create(newProduct);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async update(data) {
+    try {
+      return await this.service.findByIdAndUpdate(
         { _id: data.idProduct },
         {
           code: data.code,
@@ -76,17 +83,9 @@ class ProductManagerMongo {
     }
   }
 
-  async createproduct(newProduct) {
+  async delete(pid) {
     try {
-      return await productsModel.create(newProduct);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async deleteProduct(pid) {
-    try {
-      return await productsModel.findByIdAndUpdate(
+      return await this.service.findByIdAndUpdate(
         { _id: pid },
         { isActive: false }
       );
@@ -96,8 +95,8 @@ class ProductManagerMongo {
   }
 
   async getProductCode(code) {
-    return await productsModel.findOne({ code });
+    return await this.service.findOne({ code });
   }
 }
 
-export default ProductManagerMongo;
+export default ProductDaoMongo;

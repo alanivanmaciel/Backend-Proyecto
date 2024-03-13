@@ -1,4 +1,4 @@
-import UserManagerMongo from "../daos/MongoDB/userManager.js"
+import UserManagerMongo from "../daos/MongoDB/userDaoMongo.js"
 import { createHash, isValidPassword } from "../utils/hashBcrypt.js";
 import { generateToken, authToken } from "../utils/jsonWebToken.js";
 
@@ -17,6 +17,7 @@ class SessionController {
                 email,
                 password: createHash(password)
             }
+
 
             const result = await this.userService.create(newUser)
 

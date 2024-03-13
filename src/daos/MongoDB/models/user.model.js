@@ -6,6 +6,10 @@ const usersCollection = "users";
 const usersSchema = new Schema({
   firstname: String,
   lastname: String,
+  fullname: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     unique: true,

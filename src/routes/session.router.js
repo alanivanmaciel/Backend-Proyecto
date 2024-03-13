@@ -4,7 +4,7 @@ import { authorization } from "../middleware/authorization.middleware.js";
 import SessionController from "../controllers/sessions.controller.js";
 
 // import auth from "../middleware/authentication.middleware.js";
-// import passport from "passport";
+import passport from "passport";
 
 const router = Router();
 const { register, login, logout, current } = new SessionController()
@@ -35,11 +35,11 @@ const { register, login, logout, current } = new SessionController()
 //         res.send({ error: 'Fallo el inicio de sesion.' })
 //     })
 
-// router.get('/github', passport.authenticate('github', { scope: ['user: email'] }), async (req, res) => { })
-// router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/api/sessions/login' }), async (req, res) => {
-//     req.session.user = req.user
-//     res.redirect('/')
-// })
+router.get('/github', passport.authenticate('github', { scope: ['user: email'] }), async (req, res) => { })
+router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/api/sessions/login' }), async (req, res) => {
+    req.session.user = req.user
+    res.redirect('/')
+})
 
 //     .get('/logout', (req, res) => {
 //         req.session.destroy(error => {

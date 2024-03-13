@@ -1,14 +1,15 @@
 import express from "express";
+import session from 'express-session'
 import logger from "morgan";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
 
 import appRouter from "./routes/index.js";
-import connectDB, { configObject } from "./config/connectDB.js";
-import ProductManagerMongo from "./daos/MongoDB/productManager.js";
-import messageModel from "./daos/models/message.models.js";
-import CartManagerMongo from "./daos/MongoDB/cartManager.js";
+import { configObject } from "./config/connectDB.js";
+import ProductManagerMongo from "./daos/MongoDB/productDaoMongo.js";
+import messageModel from "./daos/MongoDB/models/message.models.js";
+import CartManagerMongo from "./daos/MongoDB/cartDaoMongo.js";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
@@ -16,7 +17,6 @@ import cors from 'cors'
 
 const app = express();
 const PORT = configObject.port
-connectDB();
 app.get('/favicon.ico', (req, res) => res.status(204));
 app.use(express.static(__dirname + "/public"));
 app.use(express.json());
@@ -27,6 +27,12 @@ app.use(cors())
 
 initializePassport()
 app.use(passport.initialize())
+app.use(session({
+  
+  secret: 'palabraSecreta',
+  resave: true,
+  saveUninitialized: true
+}))
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -63,9 +69,9 @@ io.on("connection", (socket) => {
       return "Ya existe un producto con el mismo código.";
     }
 
-    await managerMongo.createproduct(newProduct);
+    await managerMongo.create(newProduct);
     const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
-      await managerMongo.getProducts();
+      await managerMongo.get();
     io.emit("updateProducts", {
       products: docs,
       hasPrevPage,
@@ -78,9 +84,9 @@ io.on("connection", (socket) => {
 
   socket.on("deleteProduct", async (data) => {
     const pid = data.idProduct;
-    await managerMongo.deleteProduct(pid);
+    await managerMongo.delete(pid);
     const { payload, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
-      await managerMongo.getProducts();
+      await managerMongo.get();
     io.emit("updateProducts", {
       products: payload,
       hasPrevPage,
@@ -92,9 +98,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("updateProductId", async (data) => {
-    await managerMongo.updateProduct(data);
+    await managerMongo.update(data);
     const { payload, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
-      await managerMongo.getProducts();
+      await managerMongo.get();
     io.emit("updateProducts", {
       products: payload,
       hasPrevPage,
@@ -130,4 +136,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//3.47
+//2.48

@@ -1,8 +1,8 @@
 import passport from 'passport'
 import passportJwt from 'passport-jwt'
-// import GithubStrategy from 'passport-github2'
+import GithubStrategy from 'passport-github2'
 // import { createHash, isValidPassword } from '../utils/hashBcrypt.js'
-import UserManagerMongo from '../daos/MongoDB/userManager.js'
+import UserManagerMongo from '../daos/MongoDB/userDaoMongo.js'
 import { configObject } from '../config/connectDB.js'
 
 const jwt_secret_Key = configObject.jwt_secret_Key
@@ -50,38 +50,38 @@ const initializePassport = () => {
     //     }
     // }))
 
-    // passport.serializeUser((user, done) => {
-    //     done(null, user._id)
-    // })
-    // passport.deserializeUser(async (id, done) => {
-    //     let user = await userManager.getUserById({ _id: id })
-    //     done(null, user)
-    // })
+    passport.serializeUser((user, done) => {
+        done(null, user._id)
+    })
+    passport.deserializeUser(async (id, done) => {
+        let user = await userManager.getBy({ _id: id })
+        done(null, user)
+    })
 
-    // passport.use('github', new GithubStrategy({
-    //     clientID: 'Iv1.545d12c63f15cb78',
-    //     clientSecret: 'ad7c627e6c0b315e3c82f0f91ff35427e3098c9f',
-    //     callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
-    // }, async (accesToken, refreshToken, profile, done) => {
-    //     console.log(profile);
-    //     try {
-    //         let user = await userManager.getUserBy({ email: profile._json.email })
-    //         if (!user) {
-    //             let newUser = {
-    //                 firstname: profile._json.name,
-    //                 lastname: profile._json.name,
-    //                 email: profile._json.email,
-    //                 password: ''
-    //             }
-    //             let result = await userManager.createUser(newUser)
-    //             return done(null, result)
-    //         }
-    //         return done(null, user)
-    //     } catch (error) {
-    //         return done(error)
-    //     }
+    passport.use('github', new GithubStrategy({
+        clientID: 'Iv1.545d12c63f15cb78',
+        clientSecret: 'ad7c627e6c0b315e3c82f0f91ff35427e3098c9f',
+        callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
+    }, async (accesToken, refreshToken, profile, done) => {
+        console.log(profile);
+        try {
+            let user = await userManager.getBy({ email: profile._json.email })
+            if (!user) {
+                let newUser = {
+                    firstname: profile._json.name,
+                    lastname: profile._json.name,
+                    email: profile._json.email,
+                    password: ''
+                }
+                let result = await userManager.create(newUser)
+                return done(null, result)
+            }
+            return done(null, user)
+        } catch (error) {
+            return done(error)
+        }
 
-    // }))
+    }))
 
     const cookieExtractor = (req) => {
         let token = null
