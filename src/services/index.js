@@ -1,7 +1,10 @@
-import userDao from "../daos/factory.js"
 import UserService from "./users.services.js";
+import ProductService from "./products.services.js";
+import CartService from "./carts.services.js";
 
-const { UserDao } = userDao
-const userService = new UserService(new UserDao())
+import factory from "../daos/factory.js";
+const { UserDao, ProductDao, CartsDao } = factory
 
-export default userService
+export const userService = new UserService(new UserDao())
+export const productService = new ProductService(new ProductDao())
+export const cartService = new CartService(new CartsDao())

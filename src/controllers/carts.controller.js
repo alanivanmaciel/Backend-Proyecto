@@ -1,16 +1,17 @@
-import CartDaoMongo from "../daos/MongoDB/cartDaoMongo.js";
+import { cartService } from "../services/index.js";
 
 class CartController {
     constructor() {
-        this.service = new CartDaoMongo
+        this.service = cartService
     }
 
     getCart = async (req, res) => {
         try {
             const { cid } = req.params;
-            const cart = await this.service.getCart({ _id: cid });
+            const cart = await this.service.getCart(cid);
+
             const products = cart.products.map((item) => {
-                const productDetails = item.product;
+                const productDetails = item.product
                 return {
                     _id: productDetails._id.toString(),
                     title: productDetails.title,
@@ -31,11 +32,7 @@ class CartController {
 
     createCart = async (req, res) => {
         try {
-            const result = await this.service.createCart();
-            res.send({
-                status: "succes",
-                payload: result,
-            });
+            return await this.service.createCart();
         } catch (error) {
             res.status(500).send(`Error de servidor. ${error.message}`);
         }
@@ -43,12 +40,7 @@ class CartController {
 
     addProductToCart = async (req, res) => {
         try {
-            const { cid, pid } = req.params;
-            const result = await this.service.addProductToCart(cid, pid);
-            res.send({
-                status: "succes",
-                payload: result,
-            });
+            return await this.service.addProduct(req.cid, req.pid);
         } catch (error) {
             res.status(500).send(`Error de servidor. ${error.message}`);
         }

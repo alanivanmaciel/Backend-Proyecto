@@ -4,97 +4,73 @@ class ProductDaoMongo {
   constructor() {
     this.service = productsModel
   }
-  
-  async get(limit = 10, pageQuery = 1, query, sort) {
-    try {
-      let filter = { isActive: true };
 
-      if (query) {
-        const queryParts = query.split(":");
-        if (queryParts.length === 2) {
-          const [field, value] = queryParts;
-          filter[field] = value;
-        } else {
-          console.error("Formato de consulta no válido:", query);
-        }
+  get = async (limit = 10, pageQuery = 1, query, sort) => {
+    if (query) {
+      const queryParts = query.split(":");
+      if (queryParts.length === 2) {
+        const [field, value] = queryParts;
+        filter[field] = value;
+      } else {
+        console.error("Formato de consulta no válido:", query);
       }
-      const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
-        await this.service.paginate(filter, {
-          limit,
-          page: pageQuery,
-          sort: { price: sort === "asc" ? 1 : -1 },
-          lean: true,
-        });
-        
-      return {
-        status: "success",
-        payload: docs,
-        totalPages: Math.ceil(docs.length / limit),
-        prevPage,
-        nextPage,
-        page,
-        hasPrevPage,
-        hasNextPage,
-        prevLink: hasPrevPage
-          ? `/realtimeproducts?pageQuery=${prevPage}`
-          : null,
-        nextLink: hasNextPage
-          ? `/realtimeproducts?pageQuery=${nextPage}`
-          : null,
-      };
-    } catch (error) {
-      console.error(error);
     }
+    const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
+      await this.service.paginate({ isActive: true }, {
+        limit,
+        page: pageQuery,
+        sort: { price: sort === "asc" ? 1 : -1 },
+        lean: true,
+      });
+
+    return {
+      status: "success",
+      payload: docs,
+      totalPages: Math.ceil(docs.length / limit),
+      prevPage,
+      nextPage,
+      page,
+      hasPrevPage,
+      hasNextPage,
+      prevLink: hasPrevPage
+        ? `/realtimeproducts?pageQuery=${prevPage}`
+        : null,
+      nextLink: hasNextPage
+        ? `/realtimeproducts?pageQuery=${nextPage}`
+        : null,
+    };
   }
 
-  async getBy(pid) {
-    try {
-      return await this.service.findOne({ _id: pid });
-    } catch (error) {
-      console.error(error);
-    }
+  getBy = async (pid) => {
+    return await this.service.findOne({ _id: pid });
   }
 
-  async create(newProduct) {
-    try {
-      return await this.service.create(newProduct);
-    } catch (error) {
-      console.log(error);
-    }
+  create = async (newProduct) => {
+    return await this.service.create(newProduct);
   }
 
-  async update(data) {
-    try {
-      return await this.service.findByIdAndUpdate(
-        { _id: data.idProduct },
-        {
-          code: data.code,
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          thumbnail: data.thumbnail,
-          stock: data.stock,
-          category: data.category,
-          page: data.page,
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+  update = async (data) => {
+    return await this.service.findByIdAndUpdate(
+      { _id: data.idProduct },
+      {
+        code: data.code,
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        thumbnail: data.thumbnail,
+        stock: data.stock,
+        category: data.category,
+        page: data.page,
+      },
+      { new: true }
+    );
   }
 
-  async delete(pid) {
-    try {
-      return await this.service.findByIdAndUpdate(
-        { _id: pid },
-        { isActive: false }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+  delete = async (pid) => {
+    return await this.service.findByIdAndUpdate({ _id: pid }, { isActive: false }, { new: true });
   }
 
-  async getProductCode(code) {
+  getProductCode = async (code) => {
     return await this.service.findOne({ code });
   }
 }

@@ -1,4 +1,4 @@
-import userService from "../services/index.js"
+import { userService } from "../services/index.js"
 
 class UserController {
     constructor() {
@@ -8,10 +8,8 @@ class UserController {
     getUsers = async (req, res) => {
         try {
             const result = await this.service.getUsers()
-            // console.log(result);
 
             const users = result.map(user => {
-
                 return {
                     id: user._id.toString(),
                     firstname: user.firstname,

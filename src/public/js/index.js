@@ -189,6 +189,8 @@ function deleteProduct(idProduct) {
 }
 
 socket.on("addToCartSucces", (cart) => {
+  console.log('llega');
+  
   Swal.fire({
     icon: "success",
     title: "Producto agregado al carrito.",

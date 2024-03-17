@@ -9,11 +9,11 @@ import appRouter from "./routes/index.js";
 import { configObject } from "./config/connectDB.js";
 import ProductManagerMongo from "./daos/MongoDB/productDaoMongo.js";
 import messageModel from "./daos/MongoDB/models/message.models.js";
-import CartManagerMongo from "./daos/MongoDB/cartDaoMongo.js";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import cors from 'cors'
+import CartController from "./controllers/carts.controller.js";
 
 const app = express();
 const PORT = configObject.port
@@ -28,7 +28,7 @@ app.use(cors())
 initializePassport()
 app.use(passport.initialize())
 app.use(session({
-  
+
   secret: 'palabraSecreta',
   resave: true,
   saveUninitialized: true
@@ -47,7 +47,8 @@ const httpServer = app.listen(PORT, (err) => {
 
 const io = new Server(httpServer);
 const managerMongo = new ProductManagerMongo();
-const cartManager = new CartManagerMongo();
+const cartService = new CartController();
+
 
 io.on("connection", (socket) => {
   console.log("Nuevo cliente conectado.");
@@ -97,10 +98,11 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("updateProductId", async (data) => {
-    await managerMongo.update(data);
+  socket.on("updateProductId", async (updateProduct) => {
+    await managerMongo.update(updateProduct);
     const { payload, hasPrevPage, hasNextPage, prevPage, nextPage, page } =
       await managerMongo.get();
+
     io.emit("updateProducts", {
       products: payload,
       hasPrevPage,
@@ -114,9 +116,10 @@ io.on("connection", (socket) => {
   socket.on("addToCart", async (_id) => {
     try {
       const pid = _id;
-      const cart = await cartManager.createCart();
+      const cart = await cartService.createCart();
       const cid = cart._id.toString();
-      await cartManager.addProductToCart(cid, pid);
+      await cartService.addProductToCart({ cid, pid });
+
       io.emit("addToCartSucces", cart);
     } catch (error) {
       return `Error de servidor. ${error}`;
@@ -136,4 +139,6 @@ io.on("connection", (socket) => {
   });
 });
 
-//2.48
+//3.47
+
+// snpx rpmy hpar kwen
