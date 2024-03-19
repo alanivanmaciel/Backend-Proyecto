@@ -1,8 +1,8 @@
-import { userService } from "../services/index.js"
+import { userRepository } from "../repositories/index.js"
 
 class UserController {
     constructor() {
-        this.service = userService
+        this.service = userRepository
     }
 
     getUsers = async (req, res) => {

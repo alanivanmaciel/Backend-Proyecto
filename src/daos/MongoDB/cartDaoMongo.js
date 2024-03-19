@@ -14,9 +14,6 @@ class CartDaoMongo {
   }
 
   addProductToCart = async (cid, pid) => {
-    
-    console.log('app cid',cid);
-    console.log('app pid',pid);
     const cart = await this.service.findById({ _id: cid });
     cart.products.push({ product: pid });
     let result = await this.service.findByIdAndUpdate({ _id: cid }, cart);

@@ -139,6 +139,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//3.47
-
-// snpx rpmy hpar kwen
+//2.22
