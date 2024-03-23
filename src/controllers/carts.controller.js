@@ -1,5 +1,6 @@
 import ticketsModel from "../daos/MongoDB/models/ticket.models.js";
-import { cartRepository, productRepository } from "../repositories/index.js";
+import { cartRepository, productRepository, userRepository } from "../repositories/index.js";
+import sendMail from "../utils/sendEmail.js";
 
 const Tickets = ticketsModel
 
@@ -7,6 +8,7 @@ class CartController {
     constructor() {
         this.cartService = cartRepository
         this.productService = productRepository
+        this.userService = userRepository
     }
 
     getCart = async (req, res) => {
@@ -64,8 +66,8 @@ class CartController {
                 res.status(200).send({
                     status: 'Fallo la compra.',
                     message: 'No hay productos disponibles para facturar.',
-                    
-                    notPurchased: {message: 'Los siguientes productos no cumplen con la cantidad de stock solicitado.', cartUpdate}
+
+                    notPurchased: { message: 'Los siguientes productos no cumplen con la cantidad de stock solicitado.', cartUpdate }
                 });
 
             } else {
@@ -76,6 +78,26 @@ class CartController {
                     purchaser: cart.user,
                 });
                 await ticket.save();
+
+                console.log(cart.user);
+                const getUser = await this.userService.getUser({email: cart.user})
+                console.log(getUser);
+                
+                
+
+                const to = 'alan.maciel@neotel.us'
+                const subject = '¡Tu compra fue confirmada!'
+                const html = `
+                                <h1>Tu compra Fue confirmada!</h1>
+                                <h3>Hola ${getUser.fullname}</h3>
+
+                                Adjunto el ticket por la compra realizada.
+
+                                <p>${ticket}</p>
+
+                `
+
+                sendMail(to, subject, html)
 
                 res.status(200).send({
                     status: 'Compra realizada exitosamente.',
