@@ -1,6 +1,6 @@
 <div>
-  <div class="addProduct">
-    <h1>Agregar producto:</h1>
+  <div class="addProduct {{display}}">
+    <h1>Agregar producto: </h1>
     <form>
       <label for="title">Producto</label>
       <input type="text" name="title" id="title" />
@@ -21,17 +21,22 @@
   </div>
 
   <div id="productList">
-    <h1>Lista de productos:</h1>
+    <h1>Lista de productosreal:</h1>
+    <p>{{user}}</p>
     {{#each payload}}
     <div id="{{_id}}">
       <h4>{{code}}: {{title}}</h4>
       <p>ID de producto: {{_id}}</p>
       <p>{{description}} - ${{price}} - Stock: {{stock}}</p>
-      <button type="button" onclick="addToCart('{{_id}}')">Agregar al carrito</button>
-      <button type="button"
-        onclick="updateProductId('{{_id}}','{{code}}','{{title}}','{{description}}','{{price}}','{{thumbnail}}','{{stock}}','{{category}}')">Actualizar
-        producto</button>
-      <button type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
+      <div class="{{displayAdmin}}">
+        <button type="button" onclick="addToCart('{{_id}}','{{user}}')">Agregar al carrito</button>
+      </div>
+      <div class="{{displayUser}}">
+        <button type="button"
+          onclick="updateProductId('{{_id}}','{{code}}','{{title}}','{{description}}','{{price}}','{{thumbnail}}','{{stock}}','{{category}}')">Actualizar
+          producto</button>
+        <button type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
+      </div>
     </div>
     {{/each}}
     {{#if hasPrevPage}}
@@ -41,6 +46,9 @@
     {{#if hasNextPage}}
     <a href={{nextLink}}>Siguiente</a>
     {{/if}}
+  </div>
+  <div>
+
   </div>
 
 </div>

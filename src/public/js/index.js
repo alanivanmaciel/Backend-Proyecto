@@ -90,8 +90,9 @@ function addProduct() {
   clear();
 }
 
-function addToCart(_id) {
-  socket.emit("addToCart", _id);
+function addToCart(_id, user) {
+  
+  socket.emit("addToCart", {_id, user});
 }
 
 socket.on("exisitingCode", (data) => {
@@ -189,8 +190,6 @@ function deleteProduct(idProduct) {
 }
 
 socket.on("addToCartSucces", (cart) => {
-  console.log('llega');
-  
   Swal.fire({
     icon: "success",
     title: "Producto agregado al carrito.",

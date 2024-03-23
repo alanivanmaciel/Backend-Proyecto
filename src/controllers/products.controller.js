@@ -14,6 +14,14 @@ class ProductController {
         query,
         sort
       );
+      let display
+      if (req.user.role !== 'admin') {
+        display = 'disabled';
+        result.payload.forEach(objeto => {
+          objeto.display = display;
+        });
+      }
+
       res.render("products", {
         status: result.status,
         payload: result.payload,

@@ -14,6 +14,7 @@ const cartsSchema = new Schema({
       },
     ],
   },
+  user: String,
 });
 
 cartsSchema.pre("findOne", function () {

@@ -1,10 +1,12 @@
-import UserManagerMongo from "../daos/MongoDB/userDaoMongo.js"
+import { UserDtoGet } from "../dto/userDto.js";
+import UserService from "../repositories/users.repository.js";
 import { createHash, isValidPassword } from "../utils/hashBcrypt.js";
 import { generateToken, authToken } from "../utils/jsonWebToken.js";
 
+
 class SessionController {
     constructor() {
-        this.userService = new UserManagerMongo()
+        this.userService = new UserService()
     }
 
     register = async (req, res) => {
@@ -18,8 +20,7 @@ class SessionController {
                 password: createHash(password)
             }
 
-
-            const result = await this.userService.create(newUser)
+            const result = await this.userService.createUser(newUser)
 
             const token = generateToken({
                 id: result._id
@@ -34,7 +35,7 @@ class SessionController {
                 token
             })
         } catch (error) {
-            res.send({ status: 'error', message: error })
+            res.send({ status: 'error register', message: error })
         }
     }
 
@@ -42,7 +43,7 @@ class SessionController {
         try {
             const { email, password } = req.body
 
-            const user = await this.userService.getBy({ email })
+            const user = await this.userService.getUser({ email })
 
             if (!user) return res.status(401).send({ status: 'error', message: 'El email ingresado no existe.' })
 
@@ -58,10 +59,11 @@ class SessionController {
             res.status(200).cookie('CookieToken', token, {
                 maxAge: 60 * 60 * 1000 * 24,
                 httpOnly: true
-            }).send({
-                status: 'success',
-                usersCreate: { email: user.email, role: user.role }
-            })
+            }).redirect('/api/sessions/current')
+            // .send({
+            //     status: 'success',
+            //     userLogin: { email: user.email, role: user.role }
+            // })
         } catch (error) {
             res.send({ status: 'error', message: error })
         }
@@ -77,7 +79,9 @@ class SessionController {
 
     current = async (req, res) => {
         try {
-            res.send('Datos Sensibles session')
+            const user = await this.userService.getUser({ email: req.user.email })
+            const userDto = new UserDtoGet(user)
+            res.send(userDto)
         } catch (error) {
             res.send({ status: 'error', message: error })
         }

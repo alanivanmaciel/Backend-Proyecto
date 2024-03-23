@@ -113,14 +113,30 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("addToCart", async (_id) => {
+  socket.on("addToCart", async ({ _id, user }) => {
     try {
       const pid = _id;
-      const cart = await cartService.createCart();
-      const cid = cart._id.toString();
-      await cartService.addProductToCart({ cid, pid });
+      let cid
+      const userCart = await cartService.getBy({ user })
+      if (!userCart) {
+        const cart = await cartService.createCart({ user });
+        cid = cart._id.toString();
+        await cartService.addProductToCart({ cid, pid });
+        io.emit("addToCartSucces", cart);
+      } else {
+        cid = userCart._id.toString()
+        if (userCart) {
+          const index = userCart.products.findIndex(product => product.product._id.toString() === pid.toString());
+          if (index === -1) {
+            const addpro = await cartService.addProductToCart({ cid, pid });
+            io.emit("addToCartSucces", addpro);
+          } else {
+            const addpro = await cartService.updateQuantity({ cid, pid });
+            io.emit("addToCartSucces", addpro);
+          }
+        }
+      }
 
-      io.emit("addToCartSucces", cart);
     } catch (error) {
       return `Error de servidor. ${error}`;
     }
@@ -139,4 +155,4 @@ io.on("connection", (socket) => {
   });
 });
 
-//2.22
+//3.43

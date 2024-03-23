@@ -1,19 +1,22 @@
+import CartDaoMongo from "../daos/MongoDB/cartDaoMongo.js";
 class CartService {
     constructor(cartsDao) {
-        this.dao = cartsDao
+        this.dao = new CartDaoMongo()
     }
-    
-    getCart = async (cid) => this.dao.get(cid)
 
-    createCart = async () => this.dao.create()
+    getCart = async (cid) => await this.dao.get(cid)
 
-    addProduct = async (cid, pid) => this.dao.addProductToCart(cid, pid)
+    getBy = async (filter) => await this.dao.getBy(filter)
 
-    deleteProductToCart = async (cid, pid) => this.dao.deleteProductToCart(cid, pid)
+    createCart = async (user) => await this.dao.create(user)
 
-    deleteProducts = async (pid) => this.dao.deleteProducts(pid)
-    
-    updateQuantity = async (cid, pid, quantity) => this.dao.update(cid, pid, quantity)
+    addProduct = async (cid, pid) => await this.dao.addProductToCart(cid, pid)
+
+    deleteProductToCart = async (cid, pid) => await this.dao.deleteProductToCart(cid, pid)
+
+    deleteProducts = async (pid) => await this.dao.deleteProducts(pid)
+
+    updateQuantity = async (cid, pid) => await this.dao.updateQuantity(cid, pid)
 }
 
 export default CartService

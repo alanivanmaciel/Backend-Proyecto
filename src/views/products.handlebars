@@ -7,10 +7,12 @@
             <p>ID de producto: {{_id}}</p>
             <p>{{description}} - ${{price}} - Stock: {{stock}}</p>
             <button type="button" onclick="addToCart('{{_id}}')">Agregar al carrito</button>
-            <button type="button"
-                onclick="updateProductId('{{_id}}','{{code}}','{{title}}','{{description}}','{{price}}','{{thumbnail}}','{{stock}}','{{category}}')">Actualizar
-                producto</button>
-            <button type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
+            <div class="{{display}}">
+                <button type="button"
+                    onclick="updateProductId('{{_id}}','{{code}}','{{title}}','{{description}}','{{price}}','{{thumbnail}}','{{stock}}','{{category}}')">Actualizar
+                    producto</button>
+                <button type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
+            </div>
         </div>
         {{/each}}
         {{#if hasPrevPage}}

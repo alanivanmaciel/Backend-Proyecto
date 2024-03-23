@@ -1,6 +1,11 @@
 class MessageController {
     getMessage = async (req, res) => {
-        res.render("chat", { style: "index.css" });
+        const user = req.user.email
+        console.log('chat', user);
+        
+        res.render("chat",{
+            user
+        });
     }
 }
 

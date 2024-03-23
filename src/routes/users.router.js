@@ -6,6 +6,6 @@ import UserController from "../controllers/users.controller.js";
 const router = Router()
 const { getUsers } = new UserController()
 
-router.get('/', passportCall('jwt'), authorization(['user', 'admin']), getUsers)
+router.get('/', passportCall('jwt'), authorization('admin'), getUsers)
 
 export default router

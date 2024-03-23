@@ -9,7 +9,7 @@ class UserController {
         try {
             const result = await this.service.getUsers()
 
-            const users = result.map(user => {
+            const users = result.map(user => {                
                 return {
                     id: user._id.toString(),
                     firstname: user.firstname,

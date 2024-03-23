@@ -1,4 +1,4 @@
-class UserDto {
+class UserDtoCreate {
     constructor(user) {
         this.fullname = `${user.firstname} ${user.lastname}`,
             this.firstname = user.firstname,
@@ -8,4 +8,12 @@ class UserDto {
     }
 }
 
-export default UserDto
+class UserDtoGet {
+    constructor(user) {
+        this.fullname = `${user.firstname} ${user.lastname}`,
+        this.email = user.email,
+        this.role = user.role
+    }
+}
+
+export {UserDtoCreate, UserDtoGet}

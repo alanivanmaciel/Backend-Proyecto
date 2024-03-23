@@ -1,5 +1,7 @@
 import { Router } from "express";
 import ProductManagerMongo from "../daos/MongoDB/productDaoMongo.js";
+import { authorization } from "../middleware/authorization.middleware.js";
+import { passportCall } from "../middleware/passportCall.js";
 
 const router = Router();
 const managerMongo = new ProductManagerMongo();
@@ -11,20 +13,36 @@ router
   .get('/register', (req, res) => {
     res.render('register')
   })
-  .get('/current', async (req, res) => {
-    res.send({message: 'Validacion datos sensibles ViewsRouter'})
-  })
-  .get("/", async (req, res) => {
+  // .get('/current', async (req, res) => {
+  //   res.send({message: 'Validacion datos sensibles ViewsRouter'})
+  // })
+  .get("/", passportCall('jwt'), authorization('admin', 'user'), async (req, res) => {
     try {
       const { limit, pageQuery, query, sort } = req.query;
-      const result = await managerMongo.getProducts(
+      const result = await managerMongo.get(
         limit,
         pageQuery,
         query,
         sort
       );
+
+      let display
+      if (req.user.role !== 'admin') {
+        display = 'disabled';
+        result.payload.forEach(objeto => {
+          objeto.displayUser = display; 
+          objeto.user = req.user.email
+        });
+      } else {
+        result.payload.forEach(objeto => {
+          objeto.displayAdmin = 'disabled'; 
+          objeto.user = req.user.email
+        });
+      }
+      
       res.render("realtimeproducts", {
         status: result.status,
+        user: req.user.email,
         payload: result.payload,
         totalPages: result.totalPages,
         hasPrevPage: result.hasPrevPage,
@@ -32,11 +50,12 @@ router
         prevLink: result.prevLink,
         nextLink: result.nextLink,
         page: result.page,
+        display,
         style: "index.css",
       });
     } catch (error) {
       console.log(error);
-      res.render("Error al obtener la lista de productos!");
+      res.render("Error al obtener la lista de productos (ViewsRouter)!");
       return;
     }
   })
@@ -44,7 +63,7 @@ router
   .get("/:pid", async (req, res) => {
     try {
       const { pid } = req.params;
-      const product = await managerMongo.getProductById(pid);
+      const product = await managerMongo.getBy(pid);
       res.render("realtimeproducts", { product, style: "index.css" });
     } catch (error) {
       console.log(error);
@@ -68,7 +87,7 @@ router
       const { pid } = req.params;
       const { prop, value } = req.body;
 
-      await ProductManagerMongo.updateProduct(pid, prop, value);
+      await ProductManagerMongo.update(pid, prop, value);
 
       res.status(201).send({
         status: "succes",
@@ -85,7 +104,7 @@ router
   .delete("/:pid", async (req, res) => {
     try {
       const { pid } = req.params;
-      await managerMongo.deleteProduct(pid);
+      await managerMongo.delete(pid);
       res.status(201).send({
         status: "succes",
         message: "Producto eliminado correctamente.",
