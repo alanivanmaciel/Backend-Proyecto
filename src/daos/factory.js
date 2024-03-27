@@ -19,7 +19,7 @@ switch (configObject.persistence) {
         const userModule = await import("./MongoDB/userDaoMongo.js");
         UserDao = userModule.default;
 
-        const productModuleMongo = await import("./MongoDB/productDaoMongo.js");        
+        const productModuleMongo = await import("./MongoDB/productDaoMongo.js");
         ProductDao = productModuleMongo.default;
 
         const cartsModuleMongo = await import("./MongoDB/cartDaoMongo.js");

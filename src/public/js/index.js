@@ -4,9 +4,6 @@ socket.on("updateProducts", (data) => {
   const productList = document.getElementById("productList");
   if (productList && Array.isArray(data.products)) {
     productList.innerHTML = "";
-    const h1 = document.createElement("h1");
-    h1.textContent = "Lista de productos:";
-    productList.appendChild(h1);
 
     const products = data.products;
     if (products.length === 0) {
@@ -18,14 +15,18 @@ socket.on("updateProducts", (data) => {
         const id = product._id.toString();
         const productContainer = document.createElement("div");
         const parametro = "id";
+        productContainer.classList.add("cardProduct");
         productContainer.setAttribute(parametro, id);
         productContainer.innerHTML = ` 
-          <h4>${product.code}: ${product.title}</h4>
-          <p>ID de producto: ${id}</p>
-          <p>${product.description} - $${product.price} - Stock: ${product.stock}</p>
-          <button type="button" onclick="addToCart('{{_id}}')">Agregar al carrito</button>
-          <button type="button" onclick="updateProductId('${id}','${product.code}','${product.title}','${product.description}','${product.price}','${product.thumbnail}','${product.stock}','${product.category}')">Actualizar producto</button>
-          <button type="button" onclick="deleteProduct('${id}')">Eliminar producto</button>   
+        <div class="content">
+          <div class="title">${product.title}</div>
+          <div class="price">${product.price}</div>
+          <div class="description">${product.description}</div>
+        </div>
+        <button type="button" onclick="addToCart('{{_id}}')">Agregar al carrito</button>
+        <button type="button" onclick="updateProductId('${id}','${product.code}','${product.title}','${product.description}','${product.price}','${product.thumbnail}','${product.stock}','${product.category}')">Actualizar producto</button>
+        <button type="button" onclick="deleteProduct('${id}')">Eliminar producto</button>   
+        </div>
         `;
         productList.appendChild(productContainer);
       });
@@ -91,8 +92,7 @@ function addProduct() {
 }
 
 function addToCart(_id, user) {
-  
-  socket.emit("addToCart", {_id, user});
+  socket.emit("addToCart", { _id, user });
 }
 
 socket.on("exisitingCode", (data) => {

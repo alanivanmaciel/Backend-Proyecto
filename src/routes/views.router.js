@@ -2,6 +2,7 @@ import { Router } from "express";
 import ProductManagerMongo from "../daos/MongoDB/productDaoMongo.js";
 import { authorization } from "../middleware/authorization.middleware.js";
 import { passportCall } from "../middleware/passportCall.js";
+import { generateProducts } from "./mail.router.js";
 
 const router = Router();
 const managerMongo = new ProductManagerMongo();
@@ -10,6 +11,21 @@ router
   .get('/login', (req, res) => {
     res.render('login')
   })
+
+  .get('/mockingproducts', (req, res) => {
+    let products = []
+    let displayAdmin
+    for (let i = 0; i < 100; i++) {
+      products.push(generateProducts())
+      // products.displayAdmin = 'disabled'
+    }
+
+    res.render("products", {
+      payload: products,
+      
+    })
+  })
+
   .get('/register', (req, res) => {
     res.render('register')
   })
@@ -30,16 +46,16 @@ router
       if (req.user.role !== 'admin') {
         display = 'disabled';
         result.payload.forEach(objeto => {
-          objeto.displayUser = display; 
+          objeto.displayUser = display;
           objeto.user = req.user.email
         });
       } else {
         result.payload.forEach(objeto => {
-          objeto.displayAdmin = 'disabled'; 
+          objeto.displayAdmin = 'disabled';
           objeto.user = req.user.email
         });
       }
-      
+
       res.render("realtimeproducts", {
         status: result.status,
         user: req.user.email,

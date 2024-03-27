@@ -21,36 +21,27 @@
   </div>
 
   <div id="productList">
-    <h1>Lista de productosreal:</h1>
-    <p>{{user}}</p>
     {{#each payload}}
-    <div id="{{_id}}">
+    <div class="cardProduct" id="{{_id}}">
       <h4>{{code}}: {{title}}</h4>
       <p>ID de producto: {{_id}}</p>
       <p>{{description}} - ${{price}} - Stock: {{stock}}</p>
-      <div class="{{displayAdmin}}">
-        <button type="button" onclick="addToCart('{{_id}}','{{user}}')">Agregar al carrito</button>
-      </div>
-      <div class="{{displayUser}}">
-        <button type="button"
-          onclick="updateProductId('{{_id}}','{{code}}','{{title}}','{{description}}','{{price}}','{{thumbnail}}','{{stock}}','{{category}}')">Actualizar
-          producto</button>
-        <button type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
-      </div>
+      <button class="{{displayAdmin}}" type="button" onclick="addToCart('{{_id}}')">Agregar al carrito</button>
+      <button class="{{displayUser}}" type="button"
+        onclick="updateProductId('{{_id}}','{{code}}','{{title}}','{{description}}','{{price}}','{{thumbnail}}','{{stock}}','{{category}}')">
+        Actualizar producto
+      </button>
+      <button class="{{displayUser}}" type="button" onclick="deleteProduct('{{_id}}')">Eliminar producto</button>
     </div>
     {{/each}}
-    {{#if hasPrevPage}}
-    <a href={{prevLink}}>Anterior</a>
-    {{/if}}
-    <label id="page">{{page}}</label>
-    {{#if hasNextPage}}
-    <a href={{nextLink}}>Siguiente</a>
-    {{/if}}
   </div>
-  <div>
-
-  </div>
-
+  {{#if hasPrevPage}}
+  <a href={{prevLink}}>Anterior</a>
+  {{/if}}
+  <label id="page">{{page}}</label>
+  {{#if hasNextPage}}
+  <a href={{nextLink}}>Siguiente</a>
+  {{/if}}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js"></script>

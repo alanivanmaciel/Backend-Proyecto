@@ -14,11 +14,18 @@ class ProductController {
         query,
         sort
       );
+
       let display
       if (req.user.role !== 'admin') {
         display = 'disabled';
         result.payload.forEach(objeto => {
-          objeto.display = display;
+          objeto.displayUser = display;
+          objeto.user = req.user.email
+        });
+      } else {
+        result.payload.forEach(objeto => {
+          objeto.displayAdmin = 'disabled';
+          objeto.user = req.user.email
         });
       }
 
@@ -31,6 +38,7 @@ class ProductController {
         prevLink: result.prevLink,
         nextLink: result.nextLink,
         page: result.page,
+        display,
         style: "index.css",
       });
     } catch (error) {

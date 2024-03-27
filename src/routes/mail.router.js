@@ -2,19 +2,24 @@ import { Router } from "express";
 import sendMail from "../utils/sendEmail.js";
 import sendSms from "../utils/sendSms.js";
 import { faker } from '@faker-js/faker'
+import compression from 'express-compression'
 
 
 const router = Router()
 
-const generateProducts = () => {
+export const generateProducts = () => {
     return {
         id: faker.database.mongodbObjectId(),
         title: faker.commerce.productName(),
-        price: faker.commerce.price(),
-        departament: faker.commerce.department(),
-        stock: parseInt(faker.string.numeric()),
         description: faker.commerce.productDescription(),
-        image: faker.image.url()
+        price: faker.commerce.price(),
+        thumbnail: faker.image.url(),
+        code: faker.random.alphaNumeric(5),
+        stock: parseInt(faker.string.numeric()),
+        category: faker.commerce.product(),
+        departament: faker.commerce.department(),
+        displayAdmin: 'disabled',
+        displayUser: 'disabled'
     }
 }
 
@@ -36,6 +41,7 @@ const generateUser = () => {
     }
 }
 
+router.use(compression())
 router
     .get('/mail', (req, res) => {
 
@@ -59,6 +65,15 @@ router
             status: 'succes',
             payload: users
         })
+    })
+
+    .get('/stringlargo', (req, res) => {
+        let string = ' Hola coders, esto es un string ridiculamente largo '
+        for (let i = 0; i < 5e4; i++) {
+            string += ' Hola coders, esto es un string ridiculamente largo '
+        }
+
+        res.send(string)
     })
 
 export default router
